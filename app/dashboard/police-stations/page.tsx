@@ -56,7 +56,7 @@ export default async function PoliceStationsPage() {
                 <div className="divide-y divide-slate-100 dark:divide-slate-800">
                     {stations.length === 0 ? (
                         <div className="p-12 text-center text-slate-500 dark:text-slate-400">
-                            No police stations added yet. Click "Add New Station" to create one.
+                            No police stations added yet. Click &quot;Add New Station&quot; to create one.
                         </div>
                     ) : (
                         stations.map((station) => (
