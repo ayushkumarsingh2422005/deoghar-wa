@@ -10,7 +10,8 @@ import {
     Users,
     Settings,
     LogOut,
-    ChevronRight
+    ChevronRight,
+    Star
 } from 'lucide-react';
 
 interface NavItem {
@@ -26,6 +27,7 @@ const navItems: NavItem[] = [
     { name: 'Police Stations', href: '/dashboard/police-stations', icon: LayoutDashboard },
     { name: 'Traffic Rules', href: '/dashboard/traffic-rules', icon: Settings },
     { name: 'Complaints', href: '/dashboard/complaints', icon: MessageSquare },
+    { name: 'Reviews', href: '/dashboard/reviews', icon: Star },
     { name: 'Resources', href: '/dashboard/resources', icon: Settings },
     { name: 'Admin Users', href: '/dashboard/users', icon: Users },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },

@@ -3,6 +3,7 @@ import connectDB from '@/lib/db';
 import ChatMessage from '@/models/ChatMessage';
 import Contact from '@/models/Contact';
 import { markMessageAsRead } from '@/lib/whatsapp';
+import { processChatbotMessage, sendChatbotResponse } from '@/lib/chatbot';
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 
@@ -41,6 +42,21 @@ export async function POST(request: NextRequest) {
                 const message = value.messages[0];
                 const phoneNumber = message.from;
                 const messageId = message.id;
+
+                // Check if this is a location message
+                if (message.location) {
+                    const { latitude, longitude } = message.location;
+                    console.log(`📍 Location from ${phoneNumber}: ${latitude}, ${longitude}`);
+
+                    // Find nearest police station
+                    const { handleLocationMessage } = await import('@/lib/chatbot');
+                    const response = await handleLocationMessage(phoneNumber, latitude, longitude);
+
+                    // Send response
+                    await sendChatbotResponse(phoneNumber, response);
+                    await markMessageAsRead(messageId);
+                    return NextResponse.json({ success: true });
+                }
 
                 // Check if this is a button response, list selection, or regular text
                 const messageText = message.text?.body || message.interactive?.button_reply?.title || message.interactive?.list_reply?.title || '';

@@ -283,3 +283,59 @@ export async function sendInteractiveList({
         throw error;
     }
 }
+
+/**
+ * Send a location request message with button
+ */
+export async function sendLocationRequest({
+    to,
+    bodyText,
+}: {
+    to: string;
+    bodyText: string;
+}) {
+    try {
+        validateConfig();
+
+        const url = `${WHATSAPP_API_URL}/${PHONE_NUMBER_ID}/messages`;
+
+        const payload = {
+            messaging_product: 'whatsapp',
+            to: to,
+            type: 'interactive',
+            interactive: {
+                type: 'location_request_message',
+                body: {
+                    text: bodyText,
+                },
+                action: {
+                    name: 'send_location',
+                },
+            },
+        };
+
+        console.log(`📤 Sending location request to ${to}...`);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error('❌ WhatsApp API Error:', JSON.stringify(data, null, 2));
+            throw new Error(`WhatsApp API error: ${data.error?.message || 'Unknown error'}`);
+        }
+
+        console.log(`✅ Location request sent successfully!`);
+        return data;
+    } catch (error) {
+        console.error('❌ Failed to send location request:', error);
+        throw error;
+    }
+}
