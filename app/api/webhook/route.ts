@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import ChatMessage from '@/models/ChatMessage';
 import Contact from '@/models/Contact';
-import { sendWhatsAppMessage, generateDummyReply, markMessageAsRead } from '@/lib/whatsapp';
+import { markMessageAsRead } from '@/lib/whatsapp';
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 
@@ -40,20 +40,25 @@ export async function POST(request: NextRequest) {
 
                 const message = value.messages[0];
                 const phoneNumber = message.from;
-                const messageText = message.text?.body || '';
                 const messageId = message.id;
 
-                console.log(`📥 Message received from ${phoneNumber}: ${messageText}`);
+                // Check if this is a button response, list selection, or regular text
+                const messageText = message.text?.body || message.interactive?.button_reply?.title || message.interactive?.list_reply?.title || '';
+                const buttonId = message.interactive?.button_reply?.id || message.interactive?.list_reply?.id;
 
-                // Save incoming message to database
-                await ChatMessage.create({
-                    phoneNumber,
-                    message: messageText,
-                    direction: 'incoming',
-                    messageId,
-                    timestamp: new Date(parseInt(message.timestamp) * 1000),
-                    status: 'delivered',
-                });
+                console.log(`📥 Message from ${phoneNumber}: ${messageText}${buttonId ? ` (ID: ${buttonId})` : ''}`);
+
+                // Save incoming message to database (only if there's text)
+                if (messageText.trim()) {
+                    await ChatMessage.create({
+                        phoneNumber,
+                        message: messageText,
+                        direction: 'incoming',
+                        messageId,
+                        timestamp: new Date(parseInt(message.timestamp) * 1000),
+                        status: 'delivered',
+                    });
+                }
 
                 // Update or create contact
                 await Contact.findOneAndUpdate(
@@ -66,36 +71,35 @@ export async function POST(request: NextRequest) {
                     { upsert: true, new: true }
                 );
 
-                // ✅ SEND AUTOMATIC DUMMY REPLY
+                // ✅ SEND INTELLIGENT CHATBOT REPLY
                 try {
-                    // Generate a dummy response
-                    const replyText = generateDummyReply(messageText);
+                    // Process message through chatbot logic (pass buttonId if exists)
+                    const { processChatbotMessage, sendChatbotResponse } = await import('@/lib/chatbot');
+                    const botResponse = await processChatbotMessage(phoneNumber, messageText, buttonId);
 
-                    console.log(`🤖 Sending auto-reply to ${phoneNumber}: ${replyText}`);
+                    console.log(`🤖 Sending chatbot reply to ${phoneNumber} (Type: ${botResponse.type})`);
 
-                    // Send the reply via WhatsApp API
-                    const response = await sendWhatsAppMessage({
-                        to: phoneNumber,
-                        text: replyText,
-                    });
+                    // Send the response (either buttons or text)
+                    const response = await sendChatbotResponse(phoneNumber, botResponse);
 
                     // Save the outgoing message to database
-                    if (response.messages?.[0]?.id) {
+                    if (response?.messages?.[0]?.id) {
+                        const outgoingText = botResponse.type === 'buttons' ? botResponse.bodyText : botResponse.message;
                         await ChatMessage.create({
                             phoneNumber,
-                            message: replyText,
+                            message: outgoingText || '',
                             direction: 'outgoing',
                             messageId: response.messages[0].id,
                             timestamp: new Date(),
                             status: 'sent',
                         });
-                        console.log(`✅ Auto-reply sent successfully to ${phoneNumber}`);
+                        console.log(`✅ Chatbot reply sent successfully to ${phoneNumber}`);
                     }
 
                     // Mark the incoming message as read
                     await markMessageAsRead(messageId);
                 } catch (replyError) {
-                    console.error('❌ Error sending auto-reply:', replyError);
+                    console.error('❌ Error sending chatbot reply:', replyError);
                     // Don't throw - we still want to return 200 to WhatsApp
                 }
             }

@@ -152,3 +152,134 @@ export async function markMessageAsRead(messageId: string) {
         return false;
     }
 }
+
+/**
+ * Send WhatsApp message with interactive reply buttons
+ */
+export async function sendInteractiveButtons({
+    to,
+    bodyText,
+    buttons,
+}: {
+    to: string;
+    bodyText: string;
+    buttons: Array<{ id: string; title: string }>;
+}) {
+    try {
+        validateConfig();
+
+        const url = `${WHATSAPP_API_URL}/${PHONE_NUMBER_ID}/messages`;
+
+        const payload = {
+            messaging_product: 'whatsapp',
+            recipient_type: 'individual',
+            to: to,
+            type: 'interactive',
+            interactive: {
+                type: 'button',
+                body: {
+                    text: bodyText,
+                },
+                action: {
+                    buttons: buttons.map((btn) => ({
+                        type: 'reply',
+                        reply: {
+                            id: btn.id,
+                            title: btn.title,
+                        },
+                    })),
+                },
+            },
+        };
+
+        console.log(`📤 Sending interactive buttons to ${to}...`);
+        console.log(`   Buttons:`, buttons.map(b => b.title).join(', '));
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error('❌ WhatsApp API Error:', JSON.stringify(data, null, 2));
+            throw new Error(`WhatsApp API error: ${data.error?.message || 'Unknown error'}`);
+        }
+
+        console.log(`✅ Interactive buttons sent successfully!`);
+        return data;
+    } catch (error) {
+        console.error('❌ Failed to send interactive buttons:', error);
+        throw error;
+    }
+}
+
+/**
+ * Send WhatsApp message with interactive list (menu with options)
+ */
+export async function sendInteractiveList({
+    to,
+    bodyText,
+    buttonText,
+    sections,
+}: {
+    to: string;
+    bodyText: string;
+    buttonText: string;
+    sections: Array<{
+        title?: string;
+        rows: Array<{ id: string; title: string; description?: string }>;
+    }>;
+}) {
+    try {
+        validateConfig();
+
+        const url = `${WHATSAPP_API_URL}/${PHONE_NUMBER_ID}/messages`;
+
+        const payload = {
+            messaging_product: 'whatsapp',
+            recipient_type: 'individual',
+            to: to,
+            type: 'interactive',
+            interactive: {
+                type: 'list',
+                body: {
+                    text: bodyText,
+                },
+                action: {
+                    button: buttonText,
+                    sections: sections,
+                },
+            },
+        };
+
+        console.log(`📤 Sending interactive list to ${to}...`);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error('❌ WhatsApp API Error:', JSON.stringify(data, null, 2));
+            throw new Error(`WhatsApp API error: ${data.error?.message || 'Unknown error'}`);
+        }
+
+        console.log(`✅ Interactive list sent successfully!`);
+        return data;
+    } catch (error) {
+        console.error('❌ Failed to send interactive list:', error);
+        throw error;
+    }
+}

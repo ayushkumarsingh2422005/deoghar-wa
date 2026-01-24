@@ -3,6 +3,7 @@ import mongoose, { Schema, Model, Document } from 'mongoose';
 export interface IContact extends Document {
     phoneNumber: string;
     name?: string;
+    language?: 'english' | 'hindi';
     lastMessageAt: Date;
     unreadCount: number;
     createdAt: Date;
@@ -20,6 +21,10 @@ const ContactSchema = new Schema<IContact>(
         name: {
             type: String,
             trim: true,
+        },
+        language: {
+            type: String,
+            enum: ['english', 'hindi'],
         },
         lastMessageAt: {
             type: Date,
