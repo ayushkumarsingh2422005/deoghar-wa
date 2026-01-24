@@ -23,6 +23,10 @@ const navItems: NavItem[] = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'WhatsApp Chats', href: '/dashboard/chats', icon: MessageSquare },
     { name: 'Test WhatsApp', href: '/dashboard/test-whatsapp', icon: FlaskConical },
+    { name: 'Police Stations', href: '/dashboard/police-stations', icon: LayoutDashboard },
+    { name: 'Traffic Rules', href: '/dashboard/traffic-rules', icon: Settings },
+    { name: 'Complaints', href: '/dashboard/complaints', icon: MessageSquare },
+    { name: 'Resources', href: '/dashboard/resources', icon: Settings },
     { name: 'Admin Users', href: '/dashboard/users', icon: Users },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
