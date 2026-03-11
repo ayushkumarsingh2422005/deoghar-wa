@@ -215,6 +215,7 @@ export async function handleFormSubmission(
     success: boolean;
     message: string;
     language: 'english' | 'hindi';
+    sendFollowUpMenu?: boolean;
 }> {
     // Import database connection
     const connectDB = (await import('./db')).default;
@@ -245,12 +246,14 @@ export async function handleFormSubmission(
                     success: true,
                     message: `✅ *Review Submitted*\n\nThank you for your valuable feedback/review. We appreciate your input!`,
                     language,
+                    sendFollowUpMenu: true,
                 };
             } else {
                 return {
                     success: true,
                     message: `✅ *समीक्षा जमा की गई*\n\nआपकी बहुमूल्य प्रतिक्रिया/समीक्षा के लिए धन्यवाद। हम आपके सुझाव की सराहना करते हैं!`,
                     language,
+                    sendFollowUpMenu: true,
                 };
             }
         }
@@ -260,12 +263,14 @@ export async function handleFormSubmission(
                 success: true,
                 message: `✅ *Complaint Registered Successfully*\n\nYour complaint has been registered. Our team will review it and take appropriate action.\n\nComplaint ID: ${Date.now()}\n\nYou will be contacted soon.\n\nThank you for your patience.`,
                 language,
+                sendFollowUpMenu: true,
             };
         } else {
             return {
                 success: true,
                 message: `✅ *शिकायत सफलतापूर्वक दर्ज*\n\nआपकी शिकायत दर्ज कर ली गई है। हमारी टीम इसकी समीक्षा करेगी और उचित कार्रवाई करेगी।\n\nशिकायत आईडी: ${Date.now()}\n\nजल्द ही आपसे संपर्क किया जाएगा।\n\nआपके धैर्य के लिए धन्यवाद।`,
                 language,
+                sendFollowUpMenu: true,
             };
         }
     } catch (error) {

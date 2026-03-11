@@ -16,6 +16,11 @@ interface ChatbotResponse {
         rows: Array<{ id: string; title: string; description?: string }>;
     }>;
     language?: 'english' | 'hindi';
+    /**
+     * When true, the webhook will automatically send the service menu
+     * after this response, signalling that a cycle has completed.
+     */
+    sendFollowUpMenu?: boolean;
 }
 
 // Store user flow state in memory (in production, use Redis or database)
@@ -36,20 +41,49 @@ export async function processChatbotMessage(
         return await handleInteractiveResponse(phoneNumber, interactiveId);
     }
 
-    // Check for exit/menu keywords to break any loop
+    // ── LANGUAGE GATE (must come first) ──────────────────────────────────────
+    // Before doing anything else, check whether the user has picked a language.
+    // This ensures that even "hi" / "hello" / "menu" from a brand-new user
+    // will always show the language selection prompt.
     const normalizedMessage = incomingMessage.toLowerCase().trim();
-    const exitKeywords = ['menu', 'cancel', 'exit', 'stop', 'main menu', 'help', 'hi', 'hello', 'menue'];
 
+    // Allow language-keyword shortcuts at any point (before gate check so they
+    // can still switch language by typing "english" / "hindi").
+    const languageSelection = detectLanguageSelection(normalizedMessage);
+    if (languageSelection) {
+        await Contact.findOneAndUpdate(
+            { phoneNumber },
+            { language: languageSelection },
+            { upsert: true }
+        );
+        return await showDisclaimerAndContacts(phoneNumber, languageSelection);
+    }
+
+    // Fetch the contact once; re-used below.
+    const contact = await Contact.findOne({ phoneNumber });
+    const userLanguage = contact?.language;
+
+    // If no language is set yet, show the welcome + language selection prompt.
+    if (!userLanguage) {
+        return {
+            type: 'buttons',
+            bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n\nPlease select your official language:\n\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\nकृपया अपनी आधिकारिक भाषा चुनें:`,
+            buttons: [
+                { id: 'lang_english', title: '🇬🇧 English' },
+                { id: 'lang_hindi', title: '🇮🇳 हिंदी' },
+            ],
+        };
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Check for exit/menu keywords to break any loop (only for users who
+    // already have a language selected).
+    const exitKeywords = ['menu', 'cancel', 'exit', 'stop', 'main menu', 'help', 'hi', 'hello', 'menue'];
     if (exitKeywords.includes(normalizedMessage)) {
         // Clear any existing flow state
         if (userFlowState[phoneNumber]) {
             delete userFlowState[phoneNumber];
         }
-
-        const contact = await Contact.findOne({ phoneNumber });
-        const userLanguage = contact?.language || 'english';
-
-        // Return main menu
         return getServiceMenu(userLanguage);
     }
 
@@ -66,37 +100,7 @@ export async function processChatbotMessage(
             type: 'text',
             message: result.message,
             language: result.language,
-        };
-    }
-
-    // Check if user is typing to switch language
-    const message = incomingMessage.toLowerCase().trim();
-    const languageSelection = detectLanguageSelection(message);
-
-    if (languageSelection) {
-        await Contact.findOneAndUpdate(
-            { phoneNumber },
-            { language: languageSelection },
-            { upsert: true }
-        );
-
-        // Show disclaimer and contacts after language selection
-        return await showDisclaimerAndContacts(phoneNumber, languageSelection);
-    }
-
-    // Get user's current language preference
-    const contact = await Contact.findOne({ phoneNumber });
-    const userLanguage = contact?.language;
-
-    // If no language set, send language selection buttons
-    if (!userLanguage) {
-        return {
-            type: 'buttons',
-            bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n\nPlease select your official language:\n\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\nकृपया अपनी आधिकारिक भाषा चुनें:`,
-            buttons: [
-                { id: 'lang_english', title: '🇬🇧 English' },
-                { id: 'lang_hindi', title: '🇮🇳 हिंदी' },
-            ],
+            sendFollowUpMenu: result.sendFollowUpMenu,
         };
     }
 
@@ -406,6 +410,7 @@ async function getLocationService(phoneNumber: string, language: 'english' | 'hi
             ? '📍 Please click the "Send Location" button above to share your location.'
             : '📍 कृपया अपना स्थान साझा करने के लिए ऊपर "स्थान भेजें" बटन पर क्लिक करें।',
         language,
+        // No followUpMenu here — we're still waiting for the user's location pin
     };
 }
 
@@ -626,6 +631,7 @@ async function getTrafficRulesInfo(language: 'english' | 'hindi'): Promise<Chatb
         type: 'text',
         message,
         language,
+        sendFollowUpMenu: true,  // traffic rules is a read-only info page → cycle ends
     };
 }
 
@@ -655,6 +661,19 @@ export async function sendChatbotResponse(
             text: response.message,
         });
     }
+}
+
+/**
+ * Look up a contact's language preference and send the service menu to them.
+ * Called by the webhook after a terminal response to close the cycle and return
+ * the user to the main service selection list automatically.
+ */
+export async function getContactLanguageAndSendMenu(phoneNumber: string): Promise<void> {
+    await connectDB();
+    const contact = await Contact.findOne({ phoneNumber });
+    const language = contact?.language || 'english';
+    const menu = getServiceMenu(language);
+    await sendChatbotResponse(phoneNumber, menu);
 }
 
 /**
@@ -765,5 +784,6 @@ export async function handleLocationMessage(
         type: 'text',
         message,
         language,
+        sendFollowUpMenu: true,  // location result is terminal → cycle ends
     };
 }
