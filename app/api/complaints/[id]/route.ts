@@ -17,9 +17,9 @@ export async function PUT(
         const data = await request.json();
         await connectDB();
 
-        const updateData: any = { status: data.status };
+        const updateData: Record<string, string> = { status: data.status };
         if (data.assignedTo) updateData.assignedTo = data.assignedTo;
-        if (data.status === 'resolved') updateData.resolvedAt = new Date();
+        if (data.status === 'resolved') updateData.resolvedAt = new Date().toISOString();
 
         const complaint = await Complaint.findByIdAndUpdate(id, updateData, { new: true });
         if (!complaint) {

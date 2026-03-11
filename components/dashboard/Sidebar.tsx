@@ -124,6 +124,21 @@ export default function Sidebar({ username }: SidebarProps) {
                     </form>
                 </div>
             </div>
+
+            {/* Powered by */}
+            <div className="px-4 pb-3 pt-1">
+                <p className="text-[10px] text-slate-400 dark:text-slate-600 text-center leading-relaxed">
+                    Powered by{' '}
+                    <a
+                        href="https://digicraft.one"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-slate-500 dark:hover:text-slate-500 transition-colors"
+                    >
+                        DigiCraft Innovation Pvt. Ltd.
+                    </a>
+                </p>
+            </div>
         </aside>
     );
 }

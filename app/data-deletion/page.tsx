@@ -97,6 +97,12 @@ export default function DataDeletionPage() {
                     <span className="text-slate-300 dark:text-slate-600">|</span>
                     <Link href="/dashboard" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Dashboard</Link>
                 </div>
+                <p className="mt-4 text-center text-[11px] text-slate-400 dark:text-slate-600">
+                    Powered by{' '}
+                    <a href="https://digicraft.one" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500 dark:hover:text-slate-500 transition-colors">
+                        DigiCraft Innovation Pvt. Ltd.
+                    </a>
+                </p>
             </main>
         </div>
     );

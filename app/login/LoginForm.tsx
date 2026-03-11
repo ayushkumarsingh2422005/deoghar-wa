@@ -74,9 +74,22 @@ export default function LoginForm({ isSetupRequired }: LoginFormProps) {
 
             {!isSetupRequired && (
                 <div className="mt-6 text-center text-sm text-slate-500">
-                    <p>Don't have an account? Contact your administrator.</p>
+                    <p>Don&apos;t have an account? Contact your administrator.</p>
                 </div>
             )}
+
+            {/* Powered by */}
+            <p className="mt-6 text-center text-[11px] text-slate-400 dark:text-slate-600">
+                Powered by{' '}
+                <a
+                    href="https://digicraft.one"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-slate-500 dark:hover:text-slate-500 transition-colors"
+                >
+                    DigiCraft Innovation Pvt. Ltd.
+                </a>
+            </p>
         </div>
     );
 }

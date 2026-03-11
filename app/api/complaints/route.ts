@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
         await connectDB();
 
-        const query: any = {};
+        const query: Record<string, string> = {};
         if (status) query.status = status;
         if (type) query.complaintType = type;
 

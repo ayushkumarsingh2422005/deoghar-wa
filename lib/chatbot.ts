@@ -171,6 +171,7 @@ async function showDisclaimerAndContacts(
         });
 
         message += `\n\nPlease select a service from the menu below.`;
+        message += `\n\n_Powered by DigiCraft Innovation Pvt. Ltd._`;
     } else {
         message = `✅ *आपने हिंदी भाषा का चयन किया है।*\n\nहम आपको इस भाषा में देवघर पुलिस सेवाओं के बारे में जानकारी प्रदान करेंगे।\n\n`;
         message += `⚠️ *सावधान:* अनधिकृत व्हाट्सएप चैटबॉट व्यक्तिगत विवरण, लिंक या डाउनलोड मांग सकते हैं। ये घोटाले हो सकते हैं! तुरंत *1930* पर रिपोर्ट करें।\n\n`;
@@ -182,6 +183,7 @@ async function showDisclaimerAndContacts(
         });
 
         message += `\n\nकृपया नीचे दिए गए मेनू से एक सेवा चुनें।`;
+        message += `\n\n_Powered by DigiCraft Innovation Pvt. Ltd._`;
     }
 
     // Send disclaimer and contacts, then return service menu
@@ -198,7 +200,7 @@ function getServiceMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
             type: 'list',
-            bodyText: '*Select a Police Service*\n\nPlease choose from the options below:',
+            bodyText: '*Select a Police Service*\n\nPlease choose from the options below:\n\n_Powered by DigiCraft Innovation Pvt. Ltd._',
             buttonText: 'View Services',
             sections: [
                 {
@@ -219,7 +221,7 @@ function getServiceMenu(language: 'english' | 'hindi'): ChatbotResponse {
     } else {
         return {
             type: 'list',
-            bodyText: '*पुलिस सेवा चुनें*\n\nकृपया नीचे दिए गए विकल्पों में से चुनें:',
+            bodyText: '*पुलिस सेवा चुनें*\n\nकृपया नीचे दिए गए विकल्पों में से चुनें:\n\n_Powered by DigiCraft Innovation Pvt. Ltd._',
             buttonText: 'सेवाएं देखें',
             sections: [
                 {
