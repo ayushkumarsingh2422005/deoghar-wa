@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 
         await connectDB();
 
-        const query: any = {};
+        const query: Record<string, string> = {};
         if (type) query.type = type;
 
         const resources = await Resource.find(query).sort({ order: 1, createdAt: -1 });
