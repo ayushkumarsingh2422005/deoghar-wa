@@ -274,7 +274,7 @@ async function handleServiceSelection(
             buttons: [
                 {
                     id: language === 'english' ? 'lang_hindi' : 'lang_english',
-                    title: language === 'english' ? '🇮🇳 हिंदी' : '🇬🇧 English'
+                    title: language === 'english' ? 'हिंदी' : 'English'
                 },
             ],
         };
