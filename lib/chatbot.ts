@@ -94,14 +94,22 @@ export async function processChatbotMessage(
         if (result.success) {
             // Clear flow state on success
             delete userFlowState[phoneNumber];
-        }
 
-        return {
-            type: 'text',
-            message: result.message,
-            language: result.language,
-            sendFollowUpMenu: result.sendFollowUpMenu,
-        };
+            return {
+                type: 'text',
+                message: result.message,
+                language: result.language,
+                sendFollowUpMenu: result.sendFollowUpMenu,
+            };
+        } else {
+            return {
+                type: 'buttons',
+                bodyText: result.message,
+                buttons: [{ id: 'menu', title: result.language === 'english' ? 'Main Menu' : 'मुख्य मेनू' }],
+                language: result.language,
+                sendFollowUpMenu: result.sendFollowUpMenu,
+            };
+        }
     }
 
     // Show service menu for any other message
@@ -116,6 +124,12 @@ async function handleInteractiveResponse(
     interactiveId: string
 ): Promise<ChatbotResponse> {
     await connectDB();
+
+    if (interactiveId === 'menu' || interactiveId === 'main_menu') {
+        if (userFlowState[phoneNumber]) {
+            delete userFlowState[phoneNumber];
+        }
+    }
 
     // Language selection
     if (interactiveId === 'lang_english' || interactiveId === 'lang_hindi') {
@@ -212,7 +226,7 @@ function getServiceMenu(language: 'english' | 'hindi'): ChatbotResponse {
                         { id: 'service_lost_phone', title: 'Lost Mobile Phone', description: 'Report lost phone' },
                         { id: 'service_traffic', title: 'Traffic Issues', description: 'Traffic related queries' },
                         { id: 'service_cyber', title: 'Cyber Crime', description: 'Cyber crime reporting' },
-                        { id: 'service_suggestion', title: 'Suggestions', description: 'Share your suggestions' },
+                        { id: 'service_suggestion', title: 'Suggestion / Review', description: 'Share your suggestion or review' },
                         { id: 'service_change_lang', title: 'Change Language', description: 'Switch to Hindi' },
                     ],
                 },
@@ -233,7 +247,7 @@ function getServiceMenu(language: 'english' | 'hindi'): ChatbotResponse {
                         { id: 'service_lost_phone', title: 'खोया मोबाइल फोन', description: 'खोया फोन रिपोर्ट करें' },
                         { id: 'service_traffic', title: 'यातायात समस्याएं', description: 'यातायात संबंधी प्रश्न' },
                         { id: 'service_cyber', title: 'साइबर अपराध', description: 'साइबर अपराध रिपोर्टिंग' },
-                        { id: 'service_suggestion', title: 'सुझाव', description: 'अपने सुझाव साझा करें' },
+                        { id: 'service_suggestion', title: 'सुझाव / समीक्षा', description: 'अपने सुझाव या समीक्षा साझा करें' },
                         { id: 'service_change_lang', title: 'भाषा बदलें', description: 'अंग्रेजी में स्विच करें' },
                     ],
                 },
@@ -422,14 +436,16 @@ async function getLocationService(phoneNumber: string, language: 'english' | 'hi
 function getLostPhoneSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
-            type: 'text',
-            message: `📱 *Lost Mobile Phone*\n\nTo report lost mobile phone, please visit:\n🔗 www.ceir.gov.in\n\nWe will get your request from there and inform you as soon as your mobile is found.\n\n*Not Satisfied with Police Action?*\nIf you're not satisfied with police action on your lost mobile, please reply with your:\n- Name\n- Father's Name\n- Address\n- Mobile Number\n- Lost Mobile Number\n- Concerned Police Station\n\nWe will register your complaint.\n\n(Type "Menu" to cancel)`,
+            type: 'buttons',
+            bodyText: `📱 *Lost Mobile Phone*\n\nTo report lost mobile phone, please visit:\n🔗 www.ceir.gov.in\n\nWe will get your request from there and inform you as soon as your mobile is found.\n\n*Not Satisfied with Police Action?*\nIf you're not satisfied with police action on your lost mobile, please reply with your:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Lost Mobile Number\n*Line 6:* Concerned Police Station\n\n*Example:*\nSanjay Sharma\nRahul Sharma\nWilliams Town\n9876543210\n9876543211\nTown Thana\n\nWe will register your complaint.`,
+            buttons: [{ id: 'menu', title: 'Main Menu' }],
             language,
         };
     } else {
         return {
-            type: 'text',
-            message: `📱 *खोया मोबाइल फोन*\n\nखोया हुआ मोबाइल फोन रिपोर्ट करने के लिए, कृपया यहां जाएं:\n🔗 www.ceir.gov.in\n\nहमें वहां से आपका अनुरोध मिलेगा और जैसे ही आपका मोबाइल मिलेगा, हम आपको सूचित करेंगे।\n\n*पुलिस कार्रवाई से संतुष्ट नहीं?*\nयदि आप अपने खोए हुए मोबाइल पर पुलिस कार्रवाई से संतुष्ट नहीं हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n- नाम\n- पिता का नाम\n- पता\n- मोबाइल नंबर\n- खोया मोबाइल नंबर\n- संबंधित पुलिस स्टेशन\n\nहम आपकी शिकायत दर्ज करेंगे।\n\n(रद्द करने के लिए "Menu" टाइप करें)`,
+            type: 'buttons',
+            bodyText: `📱 *खोया मोबाइल फोन*\n\nखोया हुआ मोबाइल फोन रिपोर्ट करने के लिए, कृपया यहां जाएं:\n🔗 www.ceir.gov.in\n\nहमें वहां से आपका अनुरोध मिलेगा और जैसे ही आपका मोबाइल मिलेगा, हम आपको सूचित करेंगे।\n\n*पुलिस कार्रवाई से संतुष्ट नहीं?*\nयदि आप अपने खोए हुए मोबाइल पर पुलिस कार्रवाई से संतुष्ट नहीं हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* खोया मोबाइल नंबर\n*पंक्ति 6:* संबंधित पुलिस स्टेशन\n\n*उदाहरण:*\nसंजय शर्मा\nराहुल शर्मा\nविलियम्स टाउन\n9876543210\n9876543211\nनगर थाना\n\nहम आपकी शिकायत दर्ज करेंगे।`,
+            buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
             language,
         };
     }
@@ -476,14 +492,16 @@ function getTrafficSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
 function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
-            type: 'text',
-            message: `💻 *Cyber Crime Information*\n\nTo know about various types of Cyber Frauds, please visit:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\nGo to "Learn about cybercrimes" section.\n\n*How to Report Cyber Crime:*\n📞 Call: 1930\n🏢 Visit: Cyber Police Station\n   Mobile: 9241821643\n   Location: 24.490501,86.690982\n\n*Other Issues:*\nIf you have other cyber-related issues, please reply with:\n- Name\n- Father's Name\n- Address\n- Mobile Number\n- Concerned Police Station\n- Issue Details\n\nWe will register your complaint.\n\n(Type "Menu" to cancel)`,
+            type: 'buttons',
+            bodyText: `💻 *Cyber Crime Information*\n\nTo know about various types of Cyber Frauds, please visit:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\nGo to "Learn about cybercrimes" section.\n\n*How to Report Cyber Crime:*\n📞 Call: 1930\n🏢 Visit: Cyber Police Station\n   Mobile: 9241821643\n   Location: 24.490501,86.690982\n\n*Other Issues:*\nIf you have other cyber-related issues, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted from my account\n\nWe will register your complaint.`,
+            buttons: [{ id: 'menu', title: 'Main Menu' }],
             language,
         };
     } else {
         return {
-            type: 'text',
-            message: `💻 *साइबर अपराध जानकारी*\n\nविभिन्न प्रकार के साइबर धोखाधड़ी के बारे में जानने के लिए, कृपया यहां जाएं:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\n"साइबर अपराधों के बारे में जानें" अनुभाग पर जाएं।\n\n*साइबर अपराध की रिपोर्ट कैसे करें:*\n📞 कॉल करें: 1930\n🏢 जाएं: साइबर पुलिस स्टेशन\n   मोबाइल: 9241821643\n   स्थान: 24.490501,86.690982\n\n*अन्य मुद्दे:*\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n- नाम\n- पिता का नाम\n- पता\n- मोबाइल नंबर\n- संबंधित पुलिस स्टेशन\n- मुद्दे का विवरण\n\nहम आपकी शिकायत दर्ज करेंगे।\n\n(रद्द करने के लिए "Menu" टाइप करें)`,
+            type: 'buttons',
+            bodyText: `💻 *साइबर अपराध जानकारी*\n\nविभिन्न प्रकार के साइबर धोखाधड़ी के बारे में जानने के लिए, कृपया यहां जाएं:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\n"साइबर अपराधों के बारे में जानें" अनुभाग पर जाएं।\n\n*साइबर अपराध की रिपोर्ट कैसे करें:*\n📞 कॉल करें: 1930\n🏢 जाएं: साइबर पुलिस स्टेशन\n   मोबाइल: 9241821643\n   स्थान: 24.490501,86.690982\n\n*अन्य मुद्दे:*\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से धोखाधड़ी से पैसे काटे गए\n\nहम आपकी शिकायत दर्ज करेंगे।`,
+            buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
             language,
         };
     }
@@ -498,14 +516,16 @@ function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
 function getSuggestionForm(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
-            type: 'text',
-            message: `💡 *Share Your Review/Suggestion*\n\nPlease simply type your Name and your Review.\n\n*Example:*\nRahul Kumar\nExcellent service by the traffic police team.\n\nPlease reply now.\n\n(Type "Menu" to cancel)`,
+            type: 'buttons',
+            bodyText: `💡 *Share Your Suggestion/Review*\n\nPlease simply type your Name and your Suggestion/Review.\n\n*Example:*\nRahul Kumar\nExcellent service by the traffic police team.\n\nPlease reply now.`,
+            buttons: [{ id: 'menu', title: 'Main Menu' }],
             language,
         };
     } else {
         return {
-            type: 'text',
-            message: `💡 *अपनी समीक्षा/सुझाव साझा करें*\n\nकृपया बस अपना नाम और अपनी समीक्षा टाइप करें।\n\n*उदाहरण:*\nराहुल कुमार\nट्रैफिक पुलिस टीम द्वारा उत्कृष्ट सेवा।\n\nकृपया अभी उत्तर दें।\n\n(रद्द करने के लिए "Menu" टाइप करें)`,
+            type: 'buttons',
+            bodyText: `💡 *अपना सुझाव/समीक्षा साझा करें*\n\nकृपया बस अपना नाम और अपना सुझाव/समीक्षा टाइप करें।\n\n*उदाहरण:*\nराहुल कुमार\nट्रैफिक पुलिस टीम द्वारा उत्कृष्ट सेवा।\n\nकृपया अभी उत्तर दें।`,
+            buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
             language,
         };
     }
@@ -538,36 +558,36 @@ async function handleSubServiceSelection(
             hindi: `📝 *अन्य पासपोर्ट समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nप्रिया शर्मा\nCD9876543\nदस्तावेज जमा करने में समस्या\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
         sub_character_delay: {
-            english: `📝 *Character Verification Delay*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Remarks\n\nPlease reply with all details.`,
-            hindi: `📝 *चरित्र सत्यापन में देरी*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `📝 *Character Verification Delay*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\nVerification is delayed by 15 days\n\nPlease reply with all details.`,
+            hindi: `📝 *चरित्र सत्यापन में देरी*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nसत्यापन 15 दिनों से लंबित है\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_character_other: {
-            english: `📝 *Other Character Verification Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\nPlease reply with details.`,
-            hindi: `📝 *अन्य चरित्र सत्यापन समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\nकृपया विवरण के साथ उत्तर दें।`,
+            english: `📝 *Other Character Verification Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\nName is misspelled in the application\n\nPlease reply with details.`,
+            hindi: `📝 *अन्य चरित्र सत्यापन समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
         sub_petition_not_visited: {
-            english: `📝 *Police Did Not Visit - Petition*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\nPlease reply with all details.`,
-            hindi: `📝 *पुलिस नहीं आई - याचिका*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `📝 *Police Did Not Visit - Petition*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nAmit Singh\nRakesh Singh\nWard 5, Deoghar\n9876543210\nTown Thana\nPolice did not visit regarding my petition filed 5 days ago\n\nPlease reply with all details.`,
+            hindi: `📝 *पुलिस नहीं आई - याचिका*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\n*उदाहरण:*\nअमित सिंह\nराकेश सिंह\nवार्ड 5, देवघर\n9876543210\nनगर थाना\n5 दिन पहले दायर याचिका के संबंध में पुलिस नहीं आई\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_petition_not_satisfied: {
-            english: `📝 *Not Satisfied with Police Response*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Reason for Dissatisfaction\n\nPlease reply with all details.`,
-            hindi: `📝 *पुलिस की प्रतिक्रिया से संत ुष्ट नहीं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* असंतोष का कारण\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `📝 *Not Satisfied with Police Response*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Reason for Dissatisfaction\n\n*Example:*\nVikash Yadav\nSuresh Yadav\nJasidih, Deoghar\n9876543211\nJasidih Thana\nThe investigation was closed without taking my statement\n\nPlease reply with all details.`,
+            hindi: `📝 *पुलिस की प्रतिक्रिया से संतुष्ट नहीं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* असंतोष का कारण\n\n*उदाहरण:*\nविकाश यादव\nसुरेश यादव\nजसीडीह, देवघर\n9876543211\nजसीडीह थाना\nमेरा बयान लिए बिना जांच बंद कर दी गई\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_petition_other: {
-            english: `📝 *Other Petition Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Issue Details\n\nPlease reply with all details.`,
-            hindi: `📝 *अन्य याचिका समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `📝 *Other Petition Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Issue Details\n\n*Example:*\nNeha Kumari\nManoj Prasad\nMadhupur\n9876543212\nMadhupur Thana\nNeed an update on the status of my petition\n\nPlease reply with all details.`,
+            hindi: `📝 *अन्य याचिका समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\n*उदाहरण:*\nनेहा कुमारी\nमनोज प्रसाद\nमधुपुर\n9876543212\nमधुपुर थाना\nमुझे अपनी याचिका की स्थिति का अपडेट चाहिए\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_traffic_jam: {
-            english: `🚦 *Report Traffic Jam*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Mobile Number\n*Line 3:* Traffic Jam Location\n*Line 4:* Remarks\n\nPlease reply with all details.`,
-            hindi: `🚦 *ट्रैफ़िक जाम रिपोर्ट*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* ट्रैफ़िक जाम का स्थान\n*पंक्ति 4:* टिप्पणी\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `🚦 *Report Traffic Jam*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Mobile Number\n*Line 3:* Traffic Jam Location\n*Line 4:* Remarks\n\n*Example:*\nRajeev Kumar\n9876543213\nTower Chowk\nHeavy traffic congestion for the last hour\n\nPlease reply with all details.`,
+            hindi: `🚦 *ट्रैफ़िक जाम रिपोर्ट*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* ट्रैफ़िक जाम का स्थान\n*पंक्ति 4:* टिप्पणी\n\n*उदाहरण:*\nराजीव कुमार\n9876543213\nटावर चौक\nपिछले एक घंटे से भारी ट्रैफ़िक जाम है\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_traffic_challan: {
-            english: `🚦 *Traffic Challan Issues*\n\nYou can pay online at: www.echallan.parivahan.gov.in\n\nTo report an issue, please provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Mobile Number\n*Line 3:* Challan Number\n*Line 4:* Issue Details\n\nPlease reply with details.`,
-            hindi: `🚦 *ट्रैफ़िक चालान मुद्दे*\n\nआप ऑनलाइन भुगतान कर सकते हैं: www.echallan.parivahan.gov.in\n\nसमस्या रिपोर्ट करने के लिए, कृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* चालान नंबर\n*पंक्ति 4:* समस्या विवरण\n\nकृपया विवरण के साथ उत्तर दें।`,
+            english: `🚦 *Traffic Challan Issues*\n\nYou can pay online at: www.echallan.parivahan.gov.in\n\nTo report an issue, please provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Mobile Number\n*Line 3:* Challan Number\n*Line 4:* Issue Details\n\n*Example:*\nSanjay Gupta\n9876543214\nJH12345678\nI was wearing a helmet but still got a challan\n\nPlease reply with details.`,
+            hindi: `🚦 *ट्रैफ़िक चालान मुद्दे*\n\nआप ऑनलाइन भुगतान कर सकते हैं: www.echallan.parivahan.gov.in\n\nसमस्या रिपोर्ट करने के लिए, कृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* चालान नंबर\n*पंक्ति 4:* समस्या विवरण\n\n*उदाहरण:*\nसंजय गुप्ता\n9876543214\nJH12345678\nमैंने हेलमेट पहना था फिर भी चालान कट गया\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
         sub_traffic_other: {
-            english: `🚦 *Other Traffic Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Mobile Number\n*Line 3:* Interested Police Station\n*Line 4:* Issue Details\n\nPlease reply with details.`,
-            hindi: `🚦 *अन्य यातायात समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* संबंधित पुलिस स्टेशन\n*पंक्ति 4:* समस्या विवरण\n\nकृपया विवरण के साथ उत्तर दें।`,
+            english: `🚦 *Other Traffic Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Mobile Number\n*Line 3:* Interested Police Station\n*Line 4:* Issue Details\n\n*Example:*\nPooja Dey\n9876543215\nTraffic Thana\nA traffic light is not functioning at Bajrangbali Chowk\n\nPlease reply with details.`,
+            hindi: `🚦 *अन्य यातायात समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* संबंधित पुलिस स्टेशन\n*पंक्ति 4:* समस्या विवरण\n\n*उदाहरण:*\nपूजा डे\n9876543215\nयातायात थाना\nबजरंगबली चौक पर ट्रैफिक लाइट काम नहीं कर रही है\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
     };
 
@@ -576,13 +596,10 @@ async function handleSubServiceSelection(
         return getServiceMenu(language);
     }
 
-    const cancelTip = language === 'english'
-        ? '\n\n(Type "Menu" to cancel and go back)'
-        : '\n\n(रद्द करने और वापस जाने के लिए "Menu" टाइप करें)';
-
     return {
-        type: 'text',
-        message: message[language] + cancelTip,
+        type: 'buttons',
+        bodyText: message[language],
+        buttons: [{ id: 'menu', title: language === 'english' ? 'Main Menu' : 'मुख्य मेनू' }],
         language,
     };
 }

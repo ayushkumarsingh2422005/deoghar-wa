@@ -38,8 +38,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nPriya Sharma\nCD9876543\nDocument submission issue\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nप्रिया शर्मा\nCD9876543\nदस्तावेज जमा करने में समस्या\n\nकृपया पुनः प्रयास करें।`,
             };
         }
 
@@ -59,8 +59,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nAmit Singh\nRakesh Singh\nWard 5, Deoghar\n9876543210\nTown Thana\nDetail of your issue here\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* आपका नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* समस्या विवरण\n\n*उदाहरण:*\nअमित सिंह\nराकेश सिंह\nवार्ड 5, देवघर\n9876543210\nनगर थाना\nअपनी समस्या का विवरण यहाँ लिखें\n\nकृपया पुनः प्रयास करें।`,
             };
         }
 
@@ -82,8 +82,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease simply provide:\n1. Your Name\n2. Your Review/Suggestion\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया बस प्रदान करें:\n1. आपका नाम\n2. आपकी समीक्षा/सुझाव\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease simply provide:\n1. Your Name\n2. Your Suggestion/Review\n\n*Example:*\nRahul Kumar\nExcellent service by the traffic police team.\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया बस प्रदान करें:\n1. आपका नाम\n2. अपना सुझाव/समीक्षा\n\n*उदाहरण:*\nराहुल कुमार\nट्रैफिक पुलिस टीम द्वारा उत्कृष्ट सेवा।\n\nकृपया पुनः प्रयास करें।`,
             };
         }
 
@@ -102,8 +102,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Location\n4. Remarks\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. स्थान\n4. टिप्पणी\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Location\n4. Remarks\n\n*Example:*\nRajeev Kumar\n9876543210\nTower Chowk\nHeavy traffic jam for 1 hour\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. स्थान\n4. टिप्पणी\n\n*उदाहरण:*\nराजीव कुमार\n9876543210\nटावर चौक\n1 घंटे से भारी जाम है\n\nकृपया पुनः प्रयास करें।`,
             };
         }
         return {
@@ -123,8 +123,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Challan Number\n4. Issue\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. चालान नंबर\n4. समस्या\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Challan Number\n4. Issue\n\n*Example:*\nSanjay Gupta\n9876543210\nJH12345678\nI was wearing a helmet but got challan\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. चालान नंबर\n4. समस्या\n\n*उदाहरण:*\nसंजय गुप्ता\n9876543210\nJH12345678\nमैंने हेलमेट पहना था पर चालान कट गया\n\nकृपया पुनः प्रयास करें।`,
             };
         }
         return {
@@ -144,8 +144,8 @@ export function validateFormInput(
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Station\n4. Issue\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. स्टेशन\n4. समस्या\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n1. Name\n2. Mobile Number\n3. Station\n4. Issue\n\n*Example:*\nPooja Dey\n9876543210\nTraffic Thana\nTraffic light not working at Bajrangbali Chowk\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n1. नाम\n2. मोबाइल नंबर\n3. स्टेशन\n4. समस्या\n\n*उदाहरण:*\nपूजा डे\n9876543210\nयातायात थाना\nबजरंगबली चौक पर ट्रैफिक लाइट खराब है\n\nकृपया पुनः प्रयास करें।`,
             };
         }
         return {
@@ -155,6 +155,91 @@ export function validateFormInput(
                 lostMobileNumber: lines[1],
                 policeStation: lines[2],
                 remarks: lines.slice(3).join(' '),
+            },
+        };
+    }
+
+    // Character delay
+    if (formType === 'sub_character_delay') {
+        if (lines.length < 3) {
+            return {
+                isValid: false,
+                errorMessage: language === 'english'
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\nVerification delayed by 15 days\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nसत्यापन 15 दिनों से लंबित है\n\nकृपया पुनः प्रयास करें।`,
+            };
+        }
+        return {
+            isValid: true,
+            data: {
+                name: lines[0],
+                applicationNumber: lines[1],
+                remarks: lines.slice(2).join(' '),
+            },
+        };
+    }
+
+    // Character other
+    if (formType === 'sub_character_other') {
+        if (lines.length < 3) {
+            return {
+                isValid: false,
+                errorMessage: language === 'english'
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\nName misspelled in application\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया पुनः प्रयास करें।`,
+            };
+        }
+        return {
+            isValid: true,
+            data: {
+                name: lines[0],
+                applicationNumber: lines[1],
+                remarks: lines.slice(2).join(' '),
+            },
+        };
+    }
+
+    // Lost Mobile
+    if (formType === 'lost_mobile') {
+        if (lines.length < 6) {
+            return {
+                isValid: false,
+                errorMessage: language === 'english'
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Lost Mobile Number\n*Line 6:* Concerned Police Station\n\n*Example:*\nSanjay Sharma\nRahul Sharma\nWilliams Town\n9876543210\n9876543211\nTown Thana\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* खोया मोबाइल नंबर\n*पंक्ति 6:* संबंधित पुलिस स्टेशन\n\n*उदाहरण:*\nसंजय शर्मा\nराहुल शर्मा\nविलियम्स टाउन\n9876543210\n9876543211\nनगर थाना\n\nकृपया पुनः प्रयास करें।`,
+            };
+        }
+        return {
+            isValid: true,
+            data: {
+                name: lines[0],
+                fatherName: lines[1],
+                address: lines[2],
+                lostMobileNumber: lines[4],
+                policeStation: lines[5],
+                remarks: lines.slice(6).join(' '), // If they provide extra info
+            },
+        };
+    }
+
+    // Cyber Crime
+    if (formType === 'cyber') {
+        if (lines.length < 6) {
+            return {
+                isValid: false,
+                errorMessage: language === 'english'
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted from my account\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से धोखाधड़ी से पैसे काटे गए\n\nकृपया पुनः प्रयास करें।`,
+            };
+        }
+        return {
+            isValid: true,
+            data: {
+                name: lines[0],
+                fatherName: lines[1],
+                address: lines[2],
+                policeStation: lines[4],
+                remarks: lines.slice(5).join(' '),
             },
         };
     }
@@ -244,14 +329,14 @@ export async function handleFormSubmission(
             if (language === 'english') {
                 return {
                     success: true,
-                    message: `✅ *Review Submitted*\n\nThank you for your valuable feedback/review. We appreciate your input!`,
+                    message: `✅ *Suggestion/Review Submitted*\n\nThank you for your valuable suggestion/review. We appreciate your input!`,
                     language,
                     sendFollowUpMenu: true,
                 };
             } else {
                 return {
                     success: true,
-                    message: `✅ *समीक्षा जमा की गई*\n\nआपकी बहुमूल्य प्रतिक्रिया/समीक्षा के लिए धन्यवाद। हम आपके सुझाव की सराहना करते हैं!`,
+                    message: `✅ *सुझाव/समीक्षा जमा की गई*\n\nआपके बहुमूल्य सुझाव/समीक्षा के लिए धन्यवाद। हम इसकी सराहना करते हैं!`,
                     language,
                     sendFollowUpMenu: true,
                 };
