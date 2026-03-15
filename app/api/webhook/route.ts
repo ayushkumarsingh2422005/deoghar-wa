@@ -59,16 +59,14 @@ export async function POST(request: NextRequest) {
 
                     // Location result is terminal → auto-send service menu after a brief pause
                     if (response.sendFollowUpMenu) {
-                        (async () => {
-                            try {
-                                sendTypingOn(phoneNumber, messageId).catch(() => { });
-                                await new Promise(r => setTimeout(r, 1500));
-                                await getContactLanguageAndSendMenu(phoneNumber);
-                                console.log(`📋 Follow-up service menu sent to ${phoneNumber} (after location)`);
-                            } catch (e) {
-                                console.error('❌ Error sending follow-up menu after location:', e);
-                            }
-                        })();
+                        try {
+                            sendTypingOn(phoneNumber, messageId).catch(() => { });
+                            await new Promise(r => setTimeout(r, 1500));
+                            await getContactLanguageAndSendMenu(phoneNumber);
+                            console.log(`📋 Follow-up service menu sent to ${phoneNumber} (after location)`);
+                        } catch (e) {
+                            console.error('❌ Error sending follow-up menu after location:', e);
+                        }
                     }
 
                     await markMessageAsRead(messageId);
@@ -135,19 +133,16 @@ export async function POST(request: NextRequest) {
                     }
 
                     // 🔁 If this response ends a cycle, automatically send the service menu.
-                    // Runs async so the webhook returns 200 to WhatsApp immediately.
                     if (botResponse.sendFollowUpMenu) {
-                        (async () => {
-                            try {
-                                sendTypingOn(phoneNumber, messageId).catch(() => { });
-                                // Brief pause so primary response arrives first
-                                await new Promise(r => setTimeout(r, 1500));
-                                await getContactLanguageAndSendMenu(phoneNumber);
-                                console.log(`📋 Follow-up service menu sent to ${phoneNumber}`);
-                            } catch (menuError) {
-                                console.error('❌ Error sending follow-up service menu:', menuError);
-                            }
-                        })();
+                        try {
+                            sendTypingOn(phoneNumber, messageId).catch(() => { });
+                            // Brief pause so primary response arrives first
+                            await new Promise(r => setTimeout(r, 1500));
+                            await getContactLanguageAndSendMenu(phoneNumber);
+                            console.log(`📋 Follow-up service menu sent to ${phoneNumber}`);
+                        } catch (menuError) {
+                            console.error('❌ Error sending follow-up service menu:', menuError);
+                        }
                     }
 
                     // Mark the incoming message as read
