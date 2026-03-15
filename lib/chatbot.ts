@@ -493,14 +493,14 @@ function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
             type: 'buttons',
-            bodyText: `💻 *Cyber Crime Information*\n\nTo know about various types of Cyber Frauds, please visit:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\nGo to "Learn about cybercrimes" section.\n\n*How to Report Cyber Crime:*\n📞 Call: 1930\n🏢 Visit: Cyber Police Station\n   Mobile: 9241821643\n   Location: 24.490501,86.690982\n\n*Other Issues:*\nIf you have other cyber-related issues, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted from my account\n\nWe will register your complaint.`,
+            bodyText: `💻 *Cyber Crime Information*\n\nTo know about various types of Cyber Frauds, please visit:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\nGo to "Learn about cybercrimes" section.\n\n*How to Report Cyber Crime:*\n📞 Call: 1930\n🏢 Visit: Cyber Police Station\n   Mobile: 9241821643\n   Location: https://www.google.com/maps?q=24.490501,86.690982\n\n*Other Issues:*\nIf you have other cyber-related issues, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted from my account\n\nWe will register your complaint.`,
             buttons: [{ id: 'menu', title: 'Main Menu' }],
             language,
         };
     } else {
         return {
             type: 'buttons',
-            bodyText: `💻 *साइबर अपराध जानकारी*\n\nविभिन्न प्रकार के साइबर धोखाधड़ी के बारे में जानने के लिए, कृपया यहां जाएं:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\n"साइबर अपराधों के बारे में जानें" अनुभाग पर जाएं।\n\n*साइबर अपराध की रिपोर्ट कैसे करें:*\n📞 कॉल करें: 1930\n🏢 जाएं: साइबर पुलिस स्टेशन\n   मोबाइल: 9241821643\n   स्थान: 24.490501,86.690982\n\n*अन्य मुद्दे:*\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से धोखाधड़ी से पैसे काटे गए\n\nहम आपकी शिकायत दर्ज करेंगे।`,
+            bodyText: `💻 *साइबर अपराध जानकारी*\n\nविभिन्न प्रकार के साइबर धोखाधड़ी के बारे में जानने के लिए, कृपया यहां जाएं:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\n"साइबर अपराधों के बारे में जानें" अनुभाग पर जाएं।\n\n*साइबर अपराध की रिपोर्ट कैसे करें:*\n📞 कॉल करें: 1930\n🏢 जाएं: साइबर पुलिस स्टेशन\n   मोबाइल: 9241821643\n   स्थान: https://www.google.com/maps?q=24.490501,86.690982\n\n*अन्य मुद्दे:*\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से धोखाधड़ी से पैसे काटे गए\n\nहम आपकी शिकायत दर्ज करेंगे।`,
             buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
             language,
         };
@@ -623,7 +623,7 @@ async function getTrafficRulesInfo(language: 'english' | 'hindi'): Promise<Chatb
         });
 
         message += `\n📞 Traffic Police Station: 9296811585\n`;
-        message += `📍 Location: 24.490654,86.691856\n\n`;
+        message += `📍 Location: https://www.google.com/maps?q=24.490654,86.691856\n\n`;
         message += `*Important Links:*\n`;
         message += `• Central Motor Vehicle Act, 1988\n`;
         message += `• Motor Vehicle Driving Regulation 2017\n`;
@@ -639,7 +639,7 @@ async function getTrafficRulesInfo(language: 'english' | 'hindi'): Promise<Chatb
         });
 
         message += `\n📞 ट्रैफ़िक पुलिस स्टेशन: 9296811585\n`;
-        message += `📍 स्थान: 24.490654,86.691856\n\n`;
+        message += `📍 स्थान: https://www.google.com/maps?q=24.490654,86.691856\n\n`;
         message += `*महत्वपूर्ण लिंक:*\n`;
         message += `• केंद्रीय मोटर वाहन अधिनियम, 1988\n`;
         message += `• मोटर वाहन ड्राइविंग विनियम 2017\n`;
