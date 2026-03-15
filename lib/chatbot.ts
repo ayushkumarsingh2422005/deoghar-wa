@@ -761,9 +761,9 @@ export async function handleLocationMessage(
     // Filter stations within 15km range
     const nearbyStations = stationsWithDistance.filter(item => item.distance <= 15);
 
-    // Sort by distance and get top 3
+    // Sort by distance and get top 1
     nearbyStations.sort((a, b) => a.distance - b.distance);
-    const nearestStations = nearbyStations.slice(0, 3);
+    const nearestStations = nearbyStations.slice(0, 1);
 
     // Build response message
     let message = '';
@@ -783,37 +783,35 @@ export async function handleLocationMessage(
     }
 
     if (language === 'english') {
-        message = `📍 *Nearest Police Stations to Your Location*\n\n`;
+        message = `📍 *Nearest Police Station to Your Location*\n\n`;
 
-        nearestStations.forEach((item, index) => {
+        nearestStations.forEach((item) => {
             const { station, distance } = item;
-            message += `${index + 1}. *${station.name}*\n`;
+            const mapLink = `https://www.google.com/maps?q=${station.location.coordinates[1]},${station.location.coordinates[0]}`;
+            message += `*${station.name}*\n`;
             message += `   📞 ${station.contactNumber}\n`;
             message += `   📏 Distance: ${distance.toFixed(2)} km\n`;
-            message += `   📍 Location: ${station.location.coordinates[1]},${station.location.coordinates[0]}\n`;
+            message += `   📍 Location: ${mapLink}\n`;
             if (station.inchargeName) {
                 message += `   👮 Incharge: ${station.inchargeName}\n`;
             }
             message += `\n`;
         });
-
-        message += `\n💡 *Tip:* You can click on the coordinates to open in Google Maps.`;
     } else {
         message = `📍 *आपके स्थान के निकटतम पुलिस स्टेशन*\n\n`;
 
-        nearestStations.forEach((item, index) => {
+        nearestStations.forEach((item) => {
             const { station, distance } = item;
-            message += `${index + 1}. *${station.nameHindi}*\n`;
+            const mapLink = `https://www.google.com/maps?q=${station.location.coordinates[1]},${station.location.coordinates[0]}`;
+            message += `*${station.nameHindi}*\n`;
             message += `   📞 ${station.contactNumber}\n`;
             message += `   📏 दूरी: ${distance.toFixed(2)} किमी\n`;
-            message += `   📍 स्थान: ${station.location.coordinates[1]},${station.location.coordinates[0]}\n`;
+            message += `   📍 स्थान: ${mapLink}\n`;
             if (station.inchargeNameHindi) {
                 message += `   👮 प्रभारी: ${station.inchargeNameHindi}\n`;
             }
             message += `\n`;
         });
-
-        message += `\n💡 *सुझाव:* आप Google Maps में खोलने के लिए निर्देशांक पर क्लिक कर सकते हैं।`;
     }
 
     return {

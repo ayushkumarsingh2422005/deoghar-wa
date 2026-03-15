@@ -71,7 +71,7 @@ export function validateFormInput(
                 fatherName: lines[1],
                 address: lines[2],
                 policeStation: lines[4],
-                remarks: lines.slice(5).join(' '),
+                remarks: `Contact No: ${lines[3]}\n\n${lines.slice(5).join(' ')}`,
             },
         };
     }
@@ -110,9 +110,8 @@ export function validateFormInput(
             isValid: true,
             data: {
                 name: lines[0],
-                lostMobileNumber: lines[1], // storing mobile in lostMobileNumber field or create new one? reuse existing
                 location: lines[2],
-                remarks: lines.slice(3).join(' '),
+                remarks: `Contact No: ${lines[1]}\n\n${lines.slice(3).join(' ')}`,
             },
         };
     }
@@ -131,9 +130,8 @@ export function validateFormInput(
             isValid: true,
             data: {
                 name: lines[0],
-                lostMobileNumber: lines[1],
                 challanNumber: lines[2],
-                remarks: lines.slice(3).join(' '),
+                remarks: `Contact No: ${lines[1]}\n\n${lines.slice(3).join(' ')}`,
             },
         };
     }
@@ -152,9 +150,8 @@ export function validateFormInput(
             isValid: true,
             data: {
                 name: lines[0],
-                lostMobileNumber: lines[1],
                 policeStation: lines[2],
-                remarks: lines.slice(3).join(' '),
+                remarks: `Contact No: ${lines[1]}\n\n${lines.slice(3).join(' ')}`,
             },
         };
     }
@@ -217,7 +214,7 @@ export function validateFormInput(
                 address: lines[2],
                 lostMobileNumber: lines[4],
                 policeStation: lines[5],
-                remarks: lines.slice(6).join(' '), // If they provide extra info
+                remarks: `Contact No: ${lines[3]}\n\n${lines.slice(6).join(' ')}`, // If they provide extra info
             },
         };
     }
@@ -239,7 +236,7 @@ export function validateFormInput(
                 fatherName: lines[1],
                 address: lines[2],
                 policeStation: lines[4],
-                remarks: lines.slice(5).join(' '),
+                remarks: `Contact No: ${lines[3]}\n\n${lines.slice(5).join(' ')}`,
             },
         };
     }
