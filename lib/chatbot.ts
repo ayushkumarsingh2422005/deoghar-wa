@@ -75,8 +75,8 @@ export async function processChatbotMessage(
             type: 'buttons',
             bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\n🚨 *Important Contacts / महत्वपूर्ण नंबर:*\n📞 Emergency / आपातकाल: 112\n📞 District Control Room: +919241821642\n📞 Cyber Crime / साइबर अपराध: 1930\n📞 Cyber Police Station: +919241821643\n📞 Traffic Police Station: +919296811585\n\nPlease select your official language:\nकृपया अपनी आधिकारिक भाषा चुनें:`,
             buttons: [
-                { id: 'lang_english', title: '🇬🇧 English' },
-                { id: 'lang_hindi', title: '🇮🇳 हिंदी' },
+                { id: 'lang_english', title: 'English' },
+                { id: 'lang_hindi', title: 'हिंदी' },
             ],
         };
     }
@@ -319,24 +319,40 @@ function getPassportSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Passport Related Issues*\n\nSelect your issue:',
             buttonText: 'Select Issue',
-            sections: [{
-                rows: [
-                    { id: 'sub_passport_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
-                    { id: 'sub_passport_other', title: 'Other Issues', description: 'Other passport related issues' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_passport_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
+                        { id: 'sub_passport_other', title: 'Other Issues', description: 'Other passport related issues' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '↩ Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
             bodyText: '*पासपोर्ट संबंधी समस्याएं*\n\nअपनी समस्या चुनें:',
             buttonText: 'समस्या चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_passport_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
-                    { id: 'sub_passport_other', title: 'अन्य समस्याएं', description: 'अन्य पासपोर्ट संबंधी समस्याएं' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_passport_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
+                        { id: 'sub_passport_other', title: 'अन्य समस्याएं', description: 'अन्य पासपोर्ट संबंधी समस्याएं' },
+                    ],
+                },
+                {
+                    title: 'नेविगेशन',
+                    rows: [
+                        { id: 'menu', title: '↩ मुख्य मेनू', description: 'मुख्य सेवा मेनू पर वापस जाएं' },
+                    ],
+                },
+            ],
         };
     }
 }
@@ -350,24 +366,40 @@ function getCharacterSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Character Verification Issues*\n\nSelect your issue:',
             buttonText: 'Select Issue',
-            sections: [{
-                rows: [
-                    { id: 'sub_character_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
-                    { id: 'sub_character_other', title: 'Other Issues', description: 'Other verification issues' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_character_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
+                        { id: 'sub_character_other', title: 'Other Issues', description: 'Other verification issues' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '↩ Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
             bodyText: '*चरित्र सत्यापन समस्याएं*\n\nअपनी समस्या चुनें:',
             buttonText: 'समस्या चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_character_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
-                    { id: 'sub_character_other', title: 'अन्य समस्याएं', description: 'अन्य सत्यापन समस्याएं' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_character_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
+                        { id: 'sub_character_other', title: 'अन्य समस्याएं', description: 'अन्य सत्यापन समस्याएं' },
+                    ],
+                },
+                {
+                    title: 'नेविगेशन',
+                    rows: [
+                        { id: 'menu', title: '↩ मुख्य मेनू', description: 'मुख्य सेवा मेनू पर वापस जाएं' },
+                    ],
+                },
+            ],
         };
     }
 }
@@ -381,26 +413,42 @@ function getPetitionSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Issues with Petition to SP Office*\n\nSelect your issue:',
             buttonText: 'Select Issue',
-            sections: [{
-                rows: [
-                    { id: 'sub_petition_not_visited', title: 'Police Did Not Visit', description: 'Police have not visited yet' },
-                    { id: 'sub_petition_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police response' },
-                    { id: 'sub_petition_other', title: 'Other Issues', description: 'Other petition related issues' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_petition_not_visited', title: 'Police Did Not Visit', description: 'Police have not visited yet' },
+                        { id: 'sub_petition_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police response' },
+                        { id: 'sub_petition_other', title: 'Other Issues', description: 'Other petition related issues' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '↩ Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
             bodyText: '*एसपी कार्यालय में याचिका से संबंधित मुद्दे*\n\nअपनी समस्या चुनें:',
             buttonText: 'समस्या चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_petition_not_visited', title: 'पुलिस नहीं आई', description: 'पुलिस अभी तक नहीं आई है' },
-                    { id: 'sub_petition_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस की प्रतिक्रिया से संतुष्ट नहीं' },
-                    { id: 'sub_petition_other', title: 'अन्य समस्याएं', description: 'अन्य याचिका संबंधी मुद्दे' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_petition_not_visited', title: 'पुलिस नहीं आई', description: 'पुलिस अभी तक नहीं आई है' },
+                        { id: 'sub_petition_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस की प्रतिक्रिया से संतुष्ट नहीं' },
+                        { id: 'sub_petition_other', title: 'अन्य समस्याएं', description: 'अन्य याचिका संबंधी मुद्दे' },
+                    ],
+                },
+                {
+                    title: 'नेविगेशन',
+                    rows: [
+                        { id: 'menu', title: '↩ मुख्य मेनू', description: 'मुख्य सेवा मेनू पर वापस जाएं' },
+                    ],
+                },
+            ],
         };
     }
 }
@@ -443,24 +491,40 @@ function getLostPhoneSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Lost Mobile Phone*\n\nSelect your option:',
             buttonText: 'Select Option',
-            sections: [{
-                rows: [
-                    { id: 'sub_lost_mobile', title: 'Report Lost Phone', description: 'Report a lost mobile phone' },
-                    { id: 'sub_lost_mobile_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police action' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_lost_mobile', title: 'Report Lost Phone', description: 'Report a lost mobile phone' },
+                        { id: 'sub_lost_mobile_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police action' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '↩ Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
             bodyText: '*खोया मोबाइल फोन*\n\nअपना विकल्प चुनें:',
             buttonText: 'विकल्प चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_lost_mobile', title: 'खोया फोन रिपोर्ट करें', description: 'अपने खोए फोन की रिपोर्ट करें' },
-                    { id: 'sub_lost_mobile_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस कार्रवाई से संतुष्ट नहीं' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_lost_mobile', title: 'खोया फोन रिपोर्ट करें', description: 'अपने खोए फोन की रिपोर्ट करें' },
+                        { id: 'sub_lost_mobile_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस कार्रवाई से संतुष्ट नहीं' },
+                    ],
+                },
+                {
+                    title: 'नेविगेशन',
+                    rows: [
+                        { id: 'menu', title: '↩ मुख्य मेनू', description: 'मुख्य सेवा मेनू पर वापस जाएं' },
+                    ],
+                },
+            ],
         };
     }
 }
@@ -474,28 +538,44 @@ function getTrafficSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Traffic Related Issues*\n\nSelect your query:',
             buttonText: 'Select Query',
-            sections: [{
-                rows: [
-                    { id: 'sub_traffic_rules', title: 'Rules & Penalties', description: 'Know about violations & fines' },
-                    { id: 'sub_traffic_jam', title: 'Report Traffic Jam', description: 'Report traffic congestion' },
-                    { id: 'sub_traffic_challan', title: 'Traffic Challan Issues', description: 'Challan related queries' },
-                    { id: 'sub_traffic_other', title: 'Other Issues', description: 'Other traffic issues' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_traffic_rules', title: 'Rules & Penalties', description: 'Know about violations & fines' },
+                        { id: 'sub_traffic_jam', title: 'Report Traffic Jam', description: 'Report traffic congestion' },
+                        { id: 'sub_traffic_challan', title: 'Traffic Challan Issues', description: 'Challan related queries' },
+                        { id: 'sub_traffic_other', title: 'Other Issues', description: 'Other traffic issues' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '↩ Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
             bodyText: '*यातायात संबंधी समस्याएं*\n\nअपना प्रश्न चुनें:',
             buttonText: 'प्रश्न चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_traffic_rules', title: 'यातायात नियम/जुर्माना', description: 'उल्लंघन और जुर्माने के बारे में जानें' },
-                    { id: 'sub_traffic_jam', title: 'ट्रैफ़िक जाम रिपोर्ट', description: 'यातायात भीड़ की रिपोर्ट करें' },
-                    { id: 'sub_traffic_challan', title: 'ट्रैफ़िक चालान मुद्दे', description: 'चालान संबंधी प्रश्न' },
-                    { id: 'sub_traffic_other', title: 'अन्य समस्याएं', description: 'अन्य यातायात समस्याएं' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_traffic_rules', title: 'यातायात नियम/जुर्माना', description: 'उल्लंघन और जुर्माने के बारे में जानें' },
+                        { id: 'sub_traffic_jam', title: 'ट्रैफ़िक जाम रिपोर्ट', description: 'यातायात भीड़ की रिपोर्ट करें' },
+                        { id: 'sub_traffic_challan', title: 'ट्रैफ़िक चालान मुद्दे', description: 'चालान संबंधी प्रश्न' },
+                        { id: 'sub_traffic_other', title: 'अन्य समस्याएं', description: 'अन्य यातायात समस्याएं' },
+                    ],
+                },
+                {
+                    title: 'नेविगेशन',
+                    rows: [
+                        { id: 'menu', title: '↩ मुख्य मेनू', description: 'मुख्य सेवा मेनू पर वापस जाएं' },
+                    ],
+                },
+            ],
         };
     }
 }
@@ -509,24 +589,40 @@ function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             type: 'list',
             bodyText: '*Cyber Crime*\n\nSelect your issue:',
             buttonText: 'Select Issue',
-            sections: [{
-                rows: [
-                    { id: 'sub_cyber', title: 'Report Cyber Crime', description: 'Report a cyber fraud' },
-                    { id: 'sub_cyber_other', title: 'Other Issues', description: 'Other cyber-related issues' },
-                ],
-            }],
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_cyber', title: 'Report Cyber Crime', description: 'Report a cyber fraud' },
+                        { id: 'sub_cyber_other', title: 'Other Issues', description: 'Other cyber-related issues' },
+                    ],
+                },
+                {
+                    title: 'Navigation',
+                    rows: [
+                        { id: 'menu', title: '\u21a9 Main Menu', description: 'Return to main service menu' },
+                    ],
+                },
+            ],
         };
     } else {
         return {
             type: 'list',
-            bodyText: '*साइबर अपराध*\n\nअपनी समस्या चुनें:',
-            buttonText: 'समस्या चुनें',
-            sections: [{
-                rows: [
-                    { id: 'sub_cyber', title: 'साइबर अपराध रिपोर्ट', description: 'साइबर धोखाधड़ी की रिपोर्ट करें' },
-                    { id: 'sub_cyber_other', title: 'अन्य समस्याएं', description: 'अन्य साइबर संबंधी मुद्दे' },
-                ],
-            }],
+            bodyText: '*\u0938\u093e\u0907\u092c\u0930 \u0905\u092a\u0930\u093e\u0927*\n\n\u0905\u092a\u0928\u0940 \u0938\u092e\u0938\u094d\u092f\u093e \u091a\u0941\u0928\u0947\u0902:',
+            buttonText: '\u0938\u092e\u0938\u094d\u092f\u093e \u091a\u0941\u0928\u0947\u0902',
+            sections: [
+                {
+                    rows: [
+                        { id: 'sub_cyber', title: '\u0938\u093e\u0907\u092c\u0930 \u0905\u092a\u0930\u093e\u0927 \u0930\u093f\u092a\u094b\u0930\u094d\u091f', description: '\u0938\u093e\u0907\u092c\u0930 \u0927\u094b\u0916\u093e\u0927\u0921\u093c\u0940 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0915\u0930\u0947\u0902' },
+                        { id: 'sub_cyber_other', title: '\u0905\u0928\u094d\u092f \u0938\u092e\u0938\u094d\u092f\u093e\u090f\u0902', description: '\u0905\u0928\u094d\u092f \u0938\u093e\u0907\u092c\u0930 \u0938\u0902\u092c\u0902\u0927\u0940 \u092e\u0941\u0926\u094d\u0926\u0947' },
+                    ],
+                },
+                {
+                    title: '\u0928\u0947\u0935\u093f\u0917\u0947\u0936\u0928',
+                    rows: [
+                        { id: 'menu', title: '\u21a9 \u092e\u0941\u0916\u094d\u092f \u092e\u0947\u0928\u0942', description: '\u092e\u0941\u0916\u094d\u092f \u0938\u0947\u0935\u093e \u092e\u0947\u0928\u0942 \u092a\u0930 \u0935\u093e\u092a\u0938 \u091c\u093e\u090f\u0902' },
+                    ],
+                },
+            ],
         };
     }
 }
