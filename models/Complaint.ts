@@ -18,6 +18,7 @@ export type ComplaintType =
     | 'suggestion';
 
 export interface IComplaint extends Document {
+    complaintId: string;
     phoneNumber: string;
     complaintType: ComplaintType;
     name: string;
@@ -39,6 +40,11 @@ export interface IComplaint extends Document {
 
 const ComplaintSchema = new Schema<IComplaint>(
     {
+        complaintId: {
+            type: String,
+            unique: true,
+            sparse: true,
+        },
         phoneNumber: {
             type: String,
             required: true,
@@ -92,9 +98,20 @@ const ComplaintSchema = new Schema<IComplaint>(
     }
 );
 
-// Index for faster queries
+// Auto-generate a human-readable complaint ID before saving a new document
+ComplaintSchema.pre('save', async function () {
+    if (this.isNew && !this.complaintId) {
+        const year = new Date().getFullYear();
+        const count = await mongoose.model('Complaint').countDocuments({});
+        const serial = String(count + 1).padStart(5, '0');
+        this.complaintId = `DGH-${year}-${serial}`;
+    }
+});
+
+// Indexes for faster queries
 ComplaintSchema.index({ phoneNumber: 1, createdAt: -1 });
 ComplaintSchema.index({ status: 1, createdAt: -1 });
+ComplaintSchema.index({ complaintType: 1, createdAt: -1 });
 
 const Complaint: Model<IComplaint> =
     mongoose.models.Complaint || mongoose.model<IComplaint>('Complaint', ComplaintSchema);

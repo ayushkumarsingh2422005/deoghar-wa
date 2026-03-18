@@ -32,6 +32,7 @@ async function getComplaint(id: string) {
     return {
         ...complaint,
         _id: complaint._id.toString(),
+        complaintId: complaint.complaintId || null,
         createdAt: complaint.createdAt.toISOString(),
         updatedAt: complaint.updatedAt.toISOString(),
         resolvedAt: complaint.resolvedAt?.toISOString(),
@@ -66,12 +67,19 @@ export default async function ComplaintDetailPage({
                         ← Back to Complaints
                     </Link>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
                     Complaint Details
                 </h1>
-                <p className="text-slate-500 dark:text-slate-400 text-base">
-                    {complaintTypeLabels[complaint.complaintType]}
-                </p>
+                <div className="flex flex-wrap items-center gap-3 mt-2">
+                    {complaint.complaintId && (
+                        <span className="font-mono text-base font-semibold px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 rounded">
+                            🆔 {complaint.complaintId}
+                        </span>
+                    )}
+                    <span className="text-slate-500 dark:text-slate-400 text-sm">
+                        {complaintTypeLabels[complaint.complaintType]}
+                    </span>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -83,6 +91,12 @@ export default async function ComplaintDetailPage({
                         </h2>
 
                         <div className="space-y-4">
+                            {complaint.complaintId && (
+                                <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded border border-indigo-200 dark:border-indigo-800">
+                                    <label className="text-xs text-indigo-600 dark:text-indigo-400 uppercase tracking-wide font-semibold">Complaint ID</label>
+                                    <p className="text-indigo-900 dark:text-indigo-100 font-mono font-bold text-lg mt-0.5">{complaint.complaintId}</p>
+                                </div>
+                            )}
                             <div>
                                 <label className="text-sm text-slate-500 dark:text-slate-400">Type</label>
                                 <p className="text-slate-900 dark:text-white font-medium">

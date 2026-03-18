@@ -258,7 +258,7 @@ export async function saveComplaint(
     phoneNumber: string,
     complaintType: string,
     data: Record<string, unknown>
-) {
+): Promise<string | null> {
     // Import database connection
     const connectDB = (await import('./db')).default;
     await connectDB();
@@ -272,18 +272,21 @@ export async function saveComplaint(
             content: String(data.content || ''),
             status: 'pending',
         });
-        return;
+        return null;
     }
 
     // Convert sub_xxx to xxx format for database
     const dbComplaintType = complaintType.replace('sub_', '');
 
-    await Complaint.create({
+    const complaint = await Complaint.create({
         phoneNumber,
         complaintType: dbComplaintType,
         ...data,
         status: 'pending',
     });
+
+    // complaintId is set by the pre-save hook
+    return complaint.complaintId || null;
 }
 
 /**
@@ -319,7 +322,7 @@ export async function handleFormSubmission(
 
     // Save to database
     try {
-        await saveComplaint(phoneNumber, flowState.step, validationResult.data || {});
+        const complaintId = await saveComplaint(phoneNumber, flowState.step, validationResult.data || {});
 
         // Success message
         if (flowState.step === 'suggestion_form') {
@@ -340,17 +343,23 @@ export async function handleFormSubmission(
             }
         }
 
+        const idLine = complaintId
+            ? language === 'english'
+                ? `\n\n🆔 *Complaint ID: ${complaintId}*\n_Please save this ID to track your complaint._`
+                : `\n\n🆔 *शिकायत आईडी: ${complaintId}*\n_इस आईडी को सुरक्षित रखें, आपकी शिकायत ट्रैक करने के काम आएगी।_`
+            : '';
+
         if (language === 'english') {
             return {
                 success: true,
-                message: `✅ *Complaint Registered Successfully*\n\nYour complaint has been registered. Our team will review it and take appropriate action.\n\nComplaint ID: ${Date.now()}\n\nYou will be contacted soon.\n\nThank you for your patience.`,
+                message: `✅ *Complaint Registered Successfully*\n\nYour complaint has been registered. Our team will review it and take appropriate action.${idLine}\n\nYou will be contacted soon. Thank you for your patience.`,
                 language,
                 sendFollowUpMenu: true,
             };
         } else {
             return {
                 success: true,
-                message: `✅ *शिकायत सफलतापूर्वक दर्ज*\n\nआपकी शिकायत दर्ज कर ली गई है। हमारी टीम इसकी समीक्षा करेगी और उचित कार्रवाई करेगी।\n\nशिकायत आईडी: ${Date.now()}\n\nजल्द ही आपसे संपर्क किया जाएगा।\n\nआपके धैर्य के लिए धन्यवाद।`,
+                message: `✅ *शिकायत सफलतापूर्वक दर्ज*\n\nआपकी शिकायत दर्ज कर ली गई है। हमारी टीम इसकी समीक्षा करेगी और उचित कार्रवाई करेगी।${idLine}\n\nजल्द ही आपसे संपर्क किया जाएगा। आपके धैर्य के लिए धन्यवाद।`,
                 language,
                 sendFollowUpMenu: true,
             };
