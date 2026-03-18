@@ -321,6 +321,7 @@ function getPassportSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Issue',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_passport_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
                         { id: 'sub_passport_other', title: 'Other Issues', description: 'Other passport related issues' },
@@ -341,6 +342,7 @@ function getPassportSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'समस्या चुनें',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_passport_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
                         { id: 'sub_passport_other', title: 'अन्य समस्याएं', description: 'अन्य पासपोर्ट संबंधी समस्याएं' },
@@ -368,6 +370,7 @@ function getCharacterSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Issue',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_character_delay', title: 'Delay in Verification', description: 'Police verification is delayed' },
                         { id: 'sub_character_other', title: 'Other Issues', description: 'Other verification issues' },
@@ -388,6 +391,7 @@ function getCharacterSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'समस्या चुनें',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_character_delay', title: 'सत्यापन में देरी', description: 'पुलिस सत्यापन में देरी हो रही है' },
                         { id: 'sub_character_other', title: 'अन्य समस्याएं', description: 'अन्य सत्यापन समस्याएं' },
@@ -415,6 +419,7 @@ function getPetitionSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Issue',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_petition_not_visited', title: 'Police Did Not Visit', description: 'Police have not visited yet' },
                         { id: 'sub_petition_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police response' },
@@ -436,6 +441,7 @@ function getPetitionSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'समस्या चुनें',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_petition_not_visited', title: 'पुलिस नहीं आई', description: 'पुलिस अभी तक नहीं आई है' },
                         { id: 'sub_petition_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस की प्रतिक्रिया से संतुष्ट नहीं' },
@@ -493,6 +499,7 @@ function getLostPhoneSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Option',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_lost_mobile', title: 'Report Lost Phone', description: 'Report a lost mobile phone' },
                         { id: 'sub_lost_mobile_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police action' },
@@ -513,6 +520,7 @@ function getLostPhoneSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'विकल्प चुनें',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_lost_mobile', title: 'खोया फोन रिपोर्ट करें', description: 'अपने खोए फोन की रिपोर्ट करें' },
                         { id: 'sub_lost_mobile_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस कार्रवाई से संतुष्ट नहीं' },
@@ -540,6 +548,7 @@ function getTrafficSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Query',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_traffic_rules', title: 'Rules & Penalties', description: 'Know about violations & fines' },
                         { id: 'sub_traffic_jam', title: 'Report Traffic Jam', description: 'Report traffic congestion' },
@@ -562,6 +571,7 @@ function getTrafficSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'प्रश्न चुनें',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_traffic_rules', title: 'यातायात नियम/जुर्माना', description: 'उल्लंघन और जुर्माने के बारे में जानें' },
                         { id: 'sub_traffic_jam', title: 'ट्रैफ़िक जाम रिपोर्ट', description: 'यातायात भीड़ की रिपोर्ट करें' },
@@ -591,6 +601,7 @@ function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: 'Select Issue',
             sections: [
                 {
+                    title: 'Options',
                     rows: [
                         { id: 'sub_cyber', title: 'Report Cyber Crime', description: 'Report a cyber fraud' },
                         { id: 'sub_cyber_other', title: 'Other Issues', description: 'Other cyber-related issues' },
@@ -611,6 +622,7 @@ function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
             buttonText: '\u0938\u092e\u0938\u094d\u092f\u093e \u091a\u0941\u0928\u0947\u0902',
             sections: [
                 {
+                    title: 'विकल्प',
                     rows: [
                         { id: 'sub_cyber', title: '\u0938\u093e\u0907\u092c\u0930 \u0905\u092a\u0930\u093e\u0927 \u0930\u093f\u092a\u094b\u0930\u094d\u091f', description: '\u0938\u093e\u0907\u092c\u0930 \u0927\u094b\u0916\u093e\u0927\u0921\u093c\u0940 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0915\u0930\u0947\u0902' },
                         { id: 'sub_cyber_other', title: '\u0905\u0928\u094d\u092f \u0938\u092e\u0938\u094d\u092f\u093e\u090f\u0902', description: '\u0905\u0928\u094d\u092f \u0938\u093e\u0907\u092c\u0930 \u0938\u0902\u092c\u0902\u0927\u0940 \u092e\u0941\u0926\u094d\u0926\u0947' },
