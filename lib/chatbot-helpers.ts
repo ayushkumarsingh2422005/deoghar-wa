@@ -197,7 +197,7 @@ export function validateFormInput(
     }
 
     // Lost Mobile
-    if (formType === 'lost_mobile') {
+    if (formType === 'sub_lost_mobile' || formType === 'sub_lost_mobile_not_satisfied') {
         if (lines.length < 6) {
             return {
                 isValid: false,
@@ -220,7 +220,7 @@ export function validateFormInput(
     }
 
     // Cyber Crime
-    if (formType === 'cyber') {
+    if (formType === 'sub_cyber' || formType === 'sub_cyber_other') {
         if (lines.length < 6) {
             return {
                 isValid: false,

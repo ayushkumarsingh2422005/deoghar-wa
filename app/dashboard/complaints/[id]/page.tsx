@@ -15,10 +15,12 @@ const complaintTypeLabels: Record<string, string> = {
     petition_not_satisfied: 'Petition - Not Satisfied',
     petition_other: 'Petition - Other Issues',
     lost_mobile: 'Lost Mobile Phone',
+    lost_mobile_not_satisfied: 'Lost Mobile - Not Satisfied',
     traffic_jam: 'Traffic - Jam',
     traffic_challan: 'Traffic - Challan',
     traffic_other: 'Traffic - Other',
     cyber: 'Cyber Crime',
+    cyber_other: 'Cyber Crime - Other',
     suggestion: 'Suggestion',
 };
 

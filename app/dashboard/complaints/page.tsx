@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import Complaint from '@/models/Complaint';
 import connectDB from '@/lib/db';
-import { Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
 
 async function getComplaints() {
     await connectDB();
@@ -26,10 +26,12 @@ const complaintTypeLabels: Record<string, string> = {
     petition_not_satisfied: 'Petition - Not Satisfied',
     petition_other: 'Petition - Other',
     lost_mobile: 'Lost Mobile Phone',
+    lost_mobile_not_satisfied: 'Lost Mobile - Not Satisfied',
     traffic_jam: 'Traffic - Jam',
     traffic_challan: 'Traffic - Challan',
     traffic_other: 'Traffic - Other',
     cyber: 'Cyber Crime',
+    cyber_other: 'Cyber Crime - Other',
     suggestion: 'Suggestion',
 };
 

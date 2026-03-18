@@ -9,10 +9,12 @@ export type ComplaintType =
     | 'petition_not_satisfied'
     | 'petition_other'
     | 'lost_mobile'
+    | 'lost_mobile_not_satisfied'
     | 'traffic_jam'
     | 'traffic_challan'
     | 'traffic_other'
     | 'cyber'
+    | 'cyber_other'
     | 'suggestion';
 
 export interface IComplaint extends Document {
@@ -54,10 +56,12 @@ const ComplaintSchema = new Schema<IComplaint>(
                 'petition_not_satisfied',
                 'petition_other',
                 'lost_mobile',
+                'lost_mobile_not_satisfied',
                 'traffic_jam',
                 'traffic_challan',
                 'traffic_other',
                 'cyber',
+                'cyber_other',
                 'suggestion',
             ],
         },

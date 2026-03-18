@@ -63,11 +63,17 @@ export async function processChatbotMessage(
     const contact = await Contact.findOne({ phoneNumber });
     const userLanguage = contact?.language;
 
-    // If no language is set yet, show the welcome + language selection prompt.
-    if (!userLanguage) {
+    const greetingKeywords = ['hi', 'hello', 'hii', 'hey', 'start', 'test'];
+    const isGreeting = greetingKeywords.some(kw => normalizedMessage.includes(kw));
+    
+    // If no language is set yet, or user typed a greeting, show the welcome + language selection prompt.
+    if (!userLanguage || isGreeting) {
+        if (userFlowState[phoneNumber]) {
+            delete userFlowState[phoneNumber];
+        }
         return {
             type: 'buttons',
-            bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n\nPlease select your official language:\n\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\nकृपया अपनी आधिकारिक भाषा चुनें:`,
+            bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\n🚨 *Important Contacts / महत्वपूर्ण नंबर:*\n📞 Emergency / आपातकाल: 112\n📞 District Control Room: +919241821642\n📞 Cyber Crime / साइबर अपराध: 1930\n📞 Cyber Police Station: +919241821643\n📞 Traffic Police Station: +919296811585\n\nPlease select your official language:\nकृपया अपनी आधिकारिक भाषा चुनें:`,
             buttons: [
                 { id: 'lang_english', title: '🇬🇧 English' },
                 { id: 'lang_hindi', title: '🇮🇳 हिंदी' },
@@ -78,7 +84,7 @@ export async function processChatbotMessage(
 
     // Check for exit/menu keywords to break any loop (only for users who
     // already have a language selected).
-    const exitKeywords = ['menu', 'cancel', 'exit', 'stop', 'main menu', 'help', 'hi', 'hello', 'menue'];
+    const exitKeywords = ['menu', 'cancel', 'exit', 'stop', 'main menu', 'help', 'menue'];
     if (exitKeywords.includes(normalizedMessage)) {
         // Clear any existing flow state
         if (userFlowState[phoneNumber]) {
@@ -291,12 +297,10 @@ async function handleServiceSelection(
         case 'service_location':
             return await getLocationService(phoneNumber, language);
         case 'service_lost_phone':
-            userFlowState[phoneNumber] = { step: 'lost_mobile' };
             return getLostPhoneSubMenu(language);
         case 'service_traffic':
             return getTrafficSubMenu(language);
         case 'service_cyber':
-            userFlowState[phoneNumber] = { step: 'cyber' };
             return getCyberSubMenu(language);
         case 'service_suggestion':
             userFlowState[phoneNumber] = { step: 'suggestion_form' };
@@ -436,17 +440,27 @@ async function getLocationService(phoneNumber: string, language: 'english' | 'hi
 function getLostPhoneSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
-            type: 'buttons',
-            bodyText: `📱 *Lost Mobile Phone*\n\nTo report lost mobile phone, please visit:\n🔗 www.ceir.gov.in\n\nWe will get your request from there and inform you as soon as your mobile is found.\n\n*Not Satisfied with Police Action?*\nIf you're not satisfied with police action on your lost mobile, please reply with your:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Lost Mobile Number\n*Line 6:* Concerned Police Station\n\n*Example:*\nSanjay Sharma\nRahul Sharma\nWilliams Town\n9876543210\n9876543211\nTown Thana\n\nWe will register your complaint.`,
-            buttons: [{ id: 'menu', title: 'Main Menu' }],
-            language,
+            type: 'list',
+            bodyText: '*Lost Mobile Phone*\n\nSelect your option:',
+            buttonText: 'Select Option',
+            sections: [{
+                rows: [
+                    { id: 'sub_lost_mobile', title: 'Report Lost Phone', description: 'Report a lost mobile phone' },
+                    { id: 'sub_lost_mobile_not_satisfied', title: 'Not Satisfied', description: 'Not satisfied with police action' },
+                ],
+            }],
         };
     } else {
         return {
-            type: 'buttons',
-            bodyText: `📱 *खोया मोबाइल फोन*\n\nखोया हुआ मोबाइल फोन रिपोर्ट करने के लिए, कृपया यहां जाएं:\n🔗 www.ceir.gov.in\n\nहमें वहां से आपका अनुरोध मिलेगा और जैसे ही आपका मोबाइल मिलेगा, हम आपको सूचित करेंगे।\n\n*पुलिस कार्रवाई से संतुष्ट नहीं?*\nयदि आप अपने खोए हुए मोबाइल पर पुलिस कार्रवाई से संतुष्ट नहीं हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* खोया मोबाइल नंबर\n*पंक्ति 6:* संबंधित पुलिस स्टेशन\n\n*उदाहरण:*\nसंजय शर्मा\nराहुल शर्मा\nविलियम्स टाउन\n9876543210\n9876543211\nनगर थाना\n\nहम आपकी शिकायत दर्ज करेंगे।`,
-            buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
-            language,
+            type: 'list',
+            bodyText: '*खोया मोबाइल फोन*\n\nअपना विकल्प चुनें:',
+            buttonText: 'विकल्प चुनें',
+            sections: [{
+                rows: [
+                    { id: 'sub_lost_mobile', title: 'खोया फोन रिपोर्ट करें', description: 'अपने खोए फोन की रिपोर्ट करें' },
+                    { id: 'sub_lost_mobile_not_satisfied', title: 'संतुष्ट नहीं', description: 'पुलिस कार्रवाई से संतुष्ट नहीं' },
+                ],
+            }],
         };
     }
 }
@@ -492,17 +506,27 @@ function getTrafficSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
 function getCyberSubMenu(language: 'english' | 'hindi'): ChatbotResponse {
     if (language === 'english') {
         return {
-            type: 'buttons',
-            bodyText: `💻 *Cyber Crime Information*\n\nTo know about various types of Cyber Frauds, please visit:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\nGo to "Learn about cybercrimes" section.\n\n*How to Report Cyber Crime:*\n📞 Call: 1930\n🏢 Visit: Cyber Police Station\n   Mobile: 9241821643\n   Location: https://www.google.com/maps?q=24.490501,86.690982\n\n*Other Issues:*\nIf you have other cyber-related issues, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted from my account\n\nWe will register your complaint.`,
-            buttons: [{ id: 'menu', title: 'Main Menu' }],
-            language,
+            type: 'list',
+            bodyText: '*Cyber Crime*\n\nSelect your issue:',
+            buttonText: 'Select Issue',
+            sections: [{
+                rows: [
+                    { id: 'sub_cyber', title: 'Report Cyber Crime', description: 'Report a cyber fraud' },
+                    { id: 'sub_cyber_other', title: 'Other Issues', description: 'Other cyber-related issues' },
+                ],
+            }],
         };
     } else {
         return {
-            type: 'buttons',
-            bodyText: `💻 *साइबर अपराध जानकारी*\n\nविभिन्न प्रकार के साइबर धोखाधड़ी के बारे में जानने के लिए, कृपया यहां जाएं:\n🔗 https://cybercrime.gov.in/Webform/Accept.aspx\n"साइबर अपराधों के बारे में जानें" अनुभाग पर जाएं।\n\n*साइबर अपराध की रिपोर्ट कैसे करें:*\n📞 कॉल करें: 1930\n🏢 जाएं: साइबर पुलिस स्टेशन\n   मोबाइल: 9241821643\n   स्थान: https://www.google.com/maps?q=24.490501,86.690982\n\n*अन्य मुद्दे:*\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* संबंधित पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से धोखाधड़ी से पैसे काटे गए\n\nहम आपकी शिकायत दर्ज करेंगे।`,
-            buttons: [{ id: 'menu', title: 'मुख्य मेनू' }],
-            language,
+            type: 'list',
+            bodyText: '*साइबर अपराध*\n\nअपनी समस्या चुनें:',
+            buttonText: 'समस्या चुनें',
+            sections: [{
+                rows: [
+                    { id: 'sub_cyber', title: 'साइबर अपराध रिपोर्ट', description: 'साइबर धोखाधड़ी की रिपोर्ट करें' },
+                    { id: 'sub_cyber_other', title: 'अन्य समस्याएं', description: 'अन्य साइबर संबंधी मुद्दे' },
+                ],
+            }],
         };
     }
 }
@@ -589,6 +613,22 @@ async function handleSubServiceSelection(
             english: `🚦 *Other Traffic Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Mobile Number\n*Line 3:* Interested Police Station\n*Line 4:* Issue Details\n\n*Example:*\nPooja Dey\n9876543215\nTraffic Thana\nA traffic light is not functioning at Bajrangbali Chowk\n\nPlease reply with details.`,
             hindi: `🚦 *अन्य यातायात समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* मोबाइल नंबर\n*पंक्ति 3:* संबंधित पुलिस स्टेशन\n*पंक्ति 4:* समस्या विवरण\n\n*उदाहरण:*\nपूजा डे\n9876543215\nयातायात थाना\nबजरंगबली चौक पर ट्रैफिक लाइट काम नहीं कर रही है\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
+        sub_lost_mobile: {
+            english: `📱 *Report Lost Mobile Phone*\n\nFor faster response, please first report your lost mobile on:\n🔗 www.ceir.gov.in\n\nTo register your complaint here, please reply with in this format:\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Lost Mobile Number\n*Line 6:* Concerned Police Station\n\n*Example:*\nSanjay Sharma\nRahul Sharma\nWilliams Town\n9876543210\n9876543211\nTown Thana\n\nPlease reply with all details.`,
+            hindi: `📱 *खोया मोबाइल फोन रिपोर्ट*\n\nतेजी से प्रतिक्रिया के लिए, पहले अपने खोए फोन की रिपोर्ट यहाँ करें:\n🔗 www.ceir.gov.in\n\nयहाँ शिकायत दर्ज करने के लिए, कृपया इस प्रकार उत्तर दें:\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* खोया मोबाइल नंबर\n*पंक्ति 6:* संबंधित पुलिस स्टेशन\n\n*उदाहरण:*\nसंजय शर्मा\nराहुल शर्मा\nविलियम्स टाउन\n9876543210\n9876543211\nनगर थाना\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+        },
+        sub_lost_mobile_not_satisfied: {
+            english: `📱 *Not Satisfied with Police Action*\n\nIf you're not satisfied with police action on your lost mobile, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Lost Mobile Number\n*Line 6:* Concerned Police Station\n\n*Example:*\nSanjay Sharma\nRahul Sharma\nWilliams Town\n9876543210\n9876543211\nTown Thana\n\nPlease reply with all details.`,
+            hindi: `📱 *पुलिस कार्रवाई से संतुष्ट नहीं*\n\nयदि आप पुलिस कार्रवाई से संतुष्ट नहीं हैं, तो कृपया निम्नलिखित के साथ उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* खोया मोबाइल नंबर\n*पंक्ति 6:* संबंधित पुलिस स्टेशन\n\n*उदाहरण:*\nसंजय शर्मा\nराहुल शर्मा\nविलियम्स टाउन\n9876543210\n9876543211\nनगर थाना\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+        },
+        sub_cyber: {
+            english: `💻 *Report Cyber Crime*\n\nYou can also report at:\n🔗 https://cybercrime.gov.in\n📞 Call 1930\n\nTo register your complaint here, please reply with:\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nAmount fraudulently deducted\n\nPlease reply with details.`,
+            hindi: `💻 *साइबर अपराध रिपोर्ट*\n\nआप यहाँ भी रिपोर्ट कर सकते हैं:\n🔗 https://cybercrime.gov.in\n📞 कॉल 1930\n\nयहाँ शिकायत दर्ज करने के लिए, कृपया उत्तर दें:\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nमेरे खाते से पैसे काटे गए\n\nकृपया विवरण के साथ उत्तर दें।`,
+        },
+        sub_cyber_other: {
+            english: `💻 *Other Cyber Issues*\n\nIf you have other cyber-related issues, please reply with:\n\n*Line 1:* Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Police Station\n*Line 6:* Issue Details\n\n*Example:*\nKamal Roy\nBijay Roy\nBompas Town\n9876543210\nCyber Thana\nQuery regarding social media hack\n\nPlease reply with details.`,
+            hindi: `💻 *अन्य साइबर मुद्दे*\n\nयदि आपके पास अन्य साइबर संबंधी मुद्दे हैं, तो कृपया उत्तर दें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* पिता का नाम\n*पंक्ति 3:* पता\n*पंक्ति 4:* मोबाइल नंबर\n*पंक्ति 5:* पुलिस स्टेशन\n*पंक्ति 6:* मुद्दे का विवरण\n\n*उदाहरण:*\nकमल रॉय\nबिजय रॉय\nबोम्पस टाउन\n9876543210\nसाइबर थाना\nसोशल मीडिया हैक के संबंध में प्रश्न\n\nकृपया विवरण के साथ उत्तर दें।`,
+        },
     };
 
     const message = formMessages[subServiceId];
@@ -614,36 +654,56 @@ async function getTrafficRulesInfo(language: 'english' | 'hindi'): Promise<Chatb
 
     if (language === 'english') {
         message = `🚦 *Traffic Rules & Penalties*\n\n`;
-        message += `*Motor Vehicle Act Violations:*\n\n`;
+        
+        message += `*Most Common Violations & Fines:*\n`;
+        message += `1. Without Helmet (Sec 194D) - ₹1,000\n`;
+        message += `2. Without Seat Belt (Sec 194B) - ₹1,000\n`;
+        message += `3. Without License (Sec 181) - ₹5,000\n`;
+        message += `4. Without Insurance (Sec 196) - ₹2,000\n`;
+        message += `5. Over-speeding (Sec 183) - ₹1,000 to ₹2,000\n`;
+        message += `6. Drunk Driving (Sec 185) - ₹10,000\n\n`;
 
-        violations.forEach((v, index) => {
-            message += `${index + 1}. *${v.crime}*\n`;
-            message += `   Section: ${v.section}\n`;
-            message += `   Penalty: ₹${v.penalty.toLocaleString()}\n\n`;
-        });
+        if (violations && violations.length > 0) {
+            message += `*Other Motor Vehicle Act Violations:*\n\n`;
+            violations.forEach((v) => {
+                message += `• *${v.crime}*\n`;
+                message += `   Section: ${v.section}\n`;
+                message += `   Penalty: ₹${v.penalty.toLocaleString()}\n\n`;
+            });
+        }
 
-        message += `\n📞 Traffic Police Station: 9296811585\n`;
+        message += `\n📞 Traffic Police Station: +919296811585\n`;
         message += `📍 Location: https://www.google.com/maps?q=24.490654,86.691856\n\n`;
-        message += `*Important Links:*\n`;
-        message += `• Central Motor Vehicle Act, 1988\n`;
-        message += `• Motor Vehicle Driving Regulation 2017\n`;
-        message += `• Road Safety Signage & Signs\n`;
+        message += `*Important Acts & Laws (Click to View):*\n`;
+        message += `• Central Motor Vehicle Act, 1988:\n  🔗 https://morth.nic.in/motor-vehicles-act-1988\n`;
+        message += `• Motor Vehicle Driving Regulation 2017:\n  🔗 https://morth.nic.in/sites/default/files/Motor_Vehicles_Driving_Regulation_2017.pdf\n`;
+        message += `• Road Safety Signage & Signs:\n  🔗 https://morth.nic.in/sites/default/files/road_safety_signs.pdf\n`;
     } else {
         message = `🚦 *यातायात नियम और जुर्माना*\n\n`;
-        message += `*मोटर वाहन अधिनियम उल्लंघन:*\n\n`;
+        
+        message += `*सबसे आम उल्लंघन और जुर्माना:*\n`;
+        message += `1. बिना हेलमेट के (धारा 194D) - ₹1,000\n`;
+        message += `2. बिना सीट बेल्ट के (धारा 194B) - ₹1,000\n`;
+        message += `3. बिना लाइसेंस के (धारा 181) - ₹5,000\n`;
+        message += `4. बिना बीमा के (धारा 196) - ₹2,000\n`;
+        message += `5. ओवर-स्पीडिंग (धारा 183) - ₹1,000 से ₹2,000\n`;
+        message += `6. शराब पीकर गाड़ी चलाना (धारा 185) - ₹10,000\n\n`;
 
-        violations.forEach((v, index) => {
-            message += `${index + 1}. *${v.crimeHindi}*\n`;
-            message += `   धारा: ${v.section}\n`;
-            message += `   जुर्माना: ₹${v.penalty.toLocaleString()}\n\n`;
-        });
+        if (violations && violations.length > 0) {
+            message += `*अन्य मोटर वाहन अधिनियम उल्लंघन:*\n\n`;
+            violations.forEach((v) => {
+                message += `• *${v.crimeHindi}*\n`;
+                message += `   धारा: ${v.section}\n`;
+                message += `   जुर्माना: ₹${v.penalty.toLocaleString()}\n\n`;
+            });
+        }
 
-        message += `\n📞 ट्रैफ़िक पुलिस स्टेशन: 9296811585\n`;
+        message += `\n📞 ट्रैफ़िक पुलिस स्टेशन: +919296811585\n`;
         message += `📍 स्थान: https://www.google.com/maps?q=24.490654,86.691856\n\n`;
-        message += `*महत्वपूर्ण लिंक:*\n`;
-        message += `• केंद्रीय मोटर वाहन अधिनियम, 1988\n`;
-        message += `• मोटर वाहन ड्राइविंग विनियम 2017\n`;
-        message += `• सड़क सुरक्षा चिह्न और संकेत\n`;
+        message += `*महत्वपूर्ण अधिनियम और कानून (देखने के लिए क्लिक करें):*\n`;
+        message += `• केंद्रीय मोटर वाहन अधिनियम, 1988:\n  🔗 https://morth.nic.in/motor-vehicles-act-1988\n`;
+        message += `• मोटर वाहन ड्राइविंग विनियम 2017:\n  🔗 https://morth.nic.in/sites/default/files/Motor_Vehicles_Driving_Regulation_2017.pdf\n`;
+        message += `• सड़क सुरक्षा चिह्न और संकेत:\n  🔗 https://morth.nic.in/sites/default/files/road_safety_signs.pdf\n`;
     }
 
     return {
