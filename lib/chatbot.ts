@@ -926,8 +926,8 @@ export async function handleLocationMessage(
         ),
     }));
 
-    // Filter stations within 15km range
-    const nearbyStations = stationsWithDistance.filter(item => item.distance <= 15);
+    // Filter stations within 10km range
+    const nearbyStations = stationsWithDistance.filter(item => item.distance <= 10);
 
     // Sort by distance and get top 1
     nearbyStations.sort((a, b) => a.distance - b.distance);
@@ -938,9 +938,9 @@ export async function handleLocationMessage(
 
     if (nearestStations.length === 0) {
         if (language === 'english') {
-            message = `📍 *No Police Station Found*\n\nIt seems you are currently outside the 15KM range of Deoghar Police Stations. Please try again when you are within the district, or call *112* for emergencies.`;
+            message = `📍 *No Police Station Found*\n\nIt seems you are currently outside the 10KM range of Deoghar Police Stations. Please try again when you are within the district, or call *112* for emergencies.`;
         } else {
-            message = `📍 *कोई पुलिस स्टेशन नहीं मिला*\n\nऐसा लगता है कि आप वर्तमान में देवघर पुलिस स्टेशनों की 15 किमी की सीमा से बाहर हैं। कृपया जिले में होने पर पुनः प्रयास करें, या आपातकालीन स्थिति के लिए *112* पर कॉल करें।`;
+            message = `📍 *कोई पुलिस स्टेशन नहीं मिला*\n\nऐसा लगता है कि आप वर्तमान में देवघर पुलिस स्टेशनों की 10 किमी की सीमा से बाहर हैं। कृपया जिले में होने पर पुनः प्रयास करें, या आपातकालीन स्थिति के लिए *112* पर कॉल करें।`;
         }
         return {
             type: 'text',
