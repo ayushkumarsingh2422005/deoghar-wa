@@ -196,14 +196,14 @@ export default async function ComplaintDetailPage({
                             <div>
                                 <p className="text-slate-500 dark:text-slate-400">Submitted</p>
                                 <p className="text-slate-900 dark:text-white">
-                                    {new Date(complaint.createdAt).toLocaleString()}
+                                    {new Date(complaint.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
                                 </p>
                             </div>
 
                             <div>
                                 <p className="text-slate-500 dark:text-slate-400">Last Updated</p>
                                 <p className="text-slate-900 dark:text-white">
-                                    {new Date(complaint.updatedAt).toLocaleString()}
+                                    {new Date(complaint.updatedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
                                 </p>
                             </div>
 
@@ -211,7 +211,7 @@ export default async function ComplaintDetailPage({
                                 <div>
                                     <p className="text-slate-500 dark:text-slate-400">Resolved</p>
                                     <p className="text-slate-900 dark:text-white">
-                                        {new Date(complaint.resolvedAt).toLocaleString()}
+                                        {new Date(complaint.resolvedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
                                     </p>
                                 </div>
                             )}

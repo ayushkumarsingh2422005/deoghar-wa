@@ -31,7 +31,7 @@ export interface IComplaint extends Document {
     lostMobileNumber?: string;
     remarks?: string;
     suggestion?: string;
-    status: 'pending' | 'in_progress' | 'resolved' | 'closed';
+    status: 'pending' | 'in_progress' | 'resolved';
     assignedTo?: string;
     resolvedAt?: Date;
     createdAt: Date;
@@ -87,7 +87,7 @@ const ComplaintSchema = new Schema<IComplaint>(
         suggestion: String,
         status: {
             type: String,
-            enum: ['pending', 'in_progress', 'resolved', 'closed'],
+            enum: ['pending', 'in_progress', 'resolved'],
             default: 'pending',
         },
         assignedTo: String,

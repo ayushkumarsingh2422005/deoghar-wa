@@ -196,8 +196,8 @@ export function validateFormInput(
         };
     }
 
-    // Lost Mobile
-    if (formType === 'sub_lost_mobile' || formType === 'sub_lost_mobile_not_satisfied') {
+    // Lost Mobile (only "Not Satisfied" is handled here; "Report Lost Mobile" redirects to CEIR portal)
+    if (formType === 'sub_lost_mobile_not_satisfied') {
         if (lines.length < 6) {
             return {
                 isValid: false,
@@ -219,8 +219,8 @@ export function validateFormInput(
         };
     }
 
-    // Cyber Crime
-    if (formType === 'sub_cyber' || formType === 'sub_cyber_other') {
+    // Cyber Crime (only "Other Issues" is handled here; "Report Cyber Crime" redirects to cybercrime.gov.in / 1930)
+    if (formType === 'sub_cyber_other') {
         if (lines.length < 6) {
             return {
                 isValid: false,

@@ -59,7 +59,6 @@ export default function ComplaintDetailClient({
                     <option value="pending">Pending</option>
                     <option value="in_progress">In Progress</option>
                     <option value="resolved">Resolved</option>
-                    <option value="closed">Closed</option>
                 </select>
             </div>
 
@@ -85,11 +84,12 @@ export default function ComplaintDetailClient({
             </button>
 
             <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-                <div className={`px-3 py-2 text-sm text-center ${status === 'resolved' || status === 'closed'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : status === 'in_progress'
-                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                <div className={`px-3 py-2 text-sm text-center ${
+                        status === 'resolved'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            : status === 'in_progress'
+                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                     }`}>
                     {status.replace('_', ' ').toUpperCase()}
                 </div>
