@@ -929,9 +929,9 @@ export async function handleLocationMessage(
     // Filter stations within 10km range
     const nearbyStations = stationsWithDistance.filter(item => item.distance <= 10);
 
-    // Sort by distance and get top 1
+    // Sort by distance and get all nearby stations
     nearbyStations.sort((a, b) => a.distance - b.distance);
-    const nearestStations = nearbyStations.slice(0, 1);
+    const nearestStations = nearbyStations;
 
     // Build response message
     let message = '';
@@ -951,7 +951,7 @@ export async function handleLocationMessage(
     }
 
     if (language === 'english') {
-        message = `📍 *Nearest Police Station to Your Location*\n\n`;
+        message = `📍 *Nearby Police Stations (sorted by distance)*\n\n`;
 
         nearestStations.forEach((item) => {
             const { station, distance } = item;
@@ -966,7 +966,7 @@ export async function handleLocationMessage(
             message += `\n`;
         });
     } else {
-        message = `📍 *आपके स्थान के निकटतम पुलिस स्टेशन*\n\n`;
+        message = `📍 *आपके निकट के पुलिस स्टेशन (दूरी के अनुसार)*\n\n`;
 
         nearestStations.forEach((item) => {
             const { station, distance } = item;
