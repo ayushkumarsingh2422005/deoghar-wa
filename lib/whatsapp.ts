@@ -100,7 +100,7 @@ export async function sendWhatsAppMessage({ to, text }: WhatsAppMessage) {
 /**
  * Generate a dummy auto-reply message based on the incoming message
  */
-export function generateDummyReply(_incomingMessage: string): string {
+export function generateDummyReply(): string {
     const responses = [
         "Thank you for your message! Our team will get back to you shortly. 🙏",
         "Hello! We've received your message. Someone from our team will respond soon. 😊",
@@ -403,6 +403,61 @@ export async function sendLocationRequest({
         return data;
     } catch (error) {
         console.error('❌ Failed to send location request:', error);
+        throw error;
+    }
+}
+
+/**
+ * Send an image message to a WhatsApp user via a publicly accessible URL.
+ * The caption is optional; if omitted the image is sent without text.
+ */
+export async function sendWhatsAppImage({
+    to,
+    imageUrl,
+    caption,
+}: {
+    to: string;
+    imageUrl: string;
+    caption?: string;
+}) {
+    try {
+        validateConfig();
+
+        const url = `${WHATSAPP_API_URL}/${PHONE_NUMBER_ID}/messages`;
+
+        const payload: Record<string, unknown> = {
+            messaging_product: 'whatsapp',
+            recipient_type: 'individual',
+            to,
+            type: 'image',
+            image: {
+                link: imageUrl,
+                ...(caption ? { caption } : {}),
+            },
+        };
+
+        console.log(`📤 Sending image to ${to}: ${imageUrl}`);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error('❌ WhatsApp Image API Error:', JSON.stringify(data, null, 2));
+            throw new Error(`WhatsApp API error: ${data.error?.message || 'Unknown error'}`);
+        }
+
+        console.log(`✅ Image sent successfully!`);
+        return data;
+    } catch (error) {
+        console.error('❌ Failed to send image:', error);
         throw error;
     }
 }

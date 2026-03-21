@@ -2,7 +2,7 @@ import Contact from '@/models/Contact';
 import PoliceStation from '@/models/PoliceStation';
 import TrafficViolation from '@/models/TrafficViolation';
 import connectDB from './db';
-import { sendInteractiveButtons, sendWhatsAppMessage, sendInteractiveList } from './whatsapp';
+import { sendInteractiveButtons, sendWhatsAppMessage, sendInteractiveList, sendWhatsAppImage } from './whatsapp';
 import { handleFormSubmission } from './chatbot-helpers';
 
 interface ChatbotResponse {
@@ -71,6 +71,17 @@ export async function processChatbotMessage(
         if (userFlowState[phoneNumber]) {
             delete userFlowState[phoneNumber];
         }
+
+        // Send the Deoghar Police logo before the language selection prompt (best-effort, non-blocking)
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+        if (baseUrl) {
+            const logoUrl = `${baseUrl}/deoghar%20police%20logo.jpeg`;
+            sendWhatsAppImage({
+                to: phoneNumber,
+                imageUrl: logoUrl,
+            }).catch(err => console.warn('⚠️  Logo image send failed (non-critical):', err?.message));
+        }
+
         return {
             type: 'buttons',
             bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\n🚨 *Important Contacts / महत्वपूर्ण नंबर:*\n📞 Emergency / आपातकाल: 112\n📞 District Control Room: +919241821642\n📞 Cyber Crime / साइबर अपराध: 1930\n📞 Cyber Police Station: +919241821643\n📞 Traffic Police Station: +919296811585\n\nPlease select your official language:\nकृपया अपनी आधिकारिक भाषा चुनें:`,
