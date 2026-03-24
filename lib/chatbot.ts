@@ -72,14 +72,18 @@ export async function processChatbotMessage(
             delete userFlowState[phoneNumber];
         }
 
-        // Send the Deoghar Police logo before the language selection prompt (best-effort, non-blocking)
+        // Send the Deoghar Police logo before the language selection prompt (awaited so it appears first)
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
         if (baseUrl) {
             const logoUrl = `${baseUrl}/deoghar%20police%20logo.jpeg`;
-            sendWhatsAppImage({
-                to: phoneNumber,
-                imageUrl: logoUrl,
-            }).catch(err => console.warn('⚠️  Logo image send failed (non-critical):', err?.message));
+            try {
+                await sendWhatsAppImage({
+                    to: phoneNumber,
+                    imageUrl: logoUrl,
+                });
+            } catch (err) {
+                console.warn('⚠️  Logo image send failed (non-critical):', (err as Error)?.message);
+            }
         }
 
         return {
