@@ -64,7 +64,7 @@ export async function processChatbotMessage(
     const contact = await Contact.findOne({ phoneNumber });
     const userLanguage = contact?.language;
 
-    const greetingKeywords = ['hi', 'hello', 'hii', 'hey', 'start', 'test'];
+    const greetingKeywords = ['hi', 'hello', 'hii', 'hey', 'start', 'test', 'johar', 'joh'];
     const isGreeting = greetingKeywords.some(kw => normalizedMessage.includes(kw));
     
     // If no language is set yet, or user typed a greeting, show the welcome + language selection prompt.
