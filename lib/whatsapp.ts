@@ -227,17 +227,19 @@ export async function sendInteractiveButtons({
     to,
     bodyText,
     buttons,
+    headerImgUrl,
 }: {
     to: string;
     bodyText: string;
     buttons: Array<{ id: string; title: string }>;
+    headerImgUrl?: string;
 }) {
     try {
         validateConfig();
 
         const url = `${WHATSAPP_API_URL}/${PHONE_NUMBER_ID}/messages`;
 
-        const payload = {
+        const payload: any = {
             messaging_product: 'whatsapp',
             recipient_type: 'individual',
             to: to,
@@ -258,6 +260,15 @@ export async function sendInteractiveButtons({
                 },
             },
         };
+
+        if (headerImgUrl) {
+            payload.interactive.header = {
+                type: 'image',
+                image: {
+                    link: headerImgUrl
+                }
+            };
+        }
 
         console.log(`📤 Sending interactive buttons to ${to}...`);
         console.log(`   Buttons:`, buttons.map(b => b.title).join(', '));

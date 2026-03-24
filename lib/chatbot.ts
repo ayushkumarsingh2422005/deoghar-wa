@@ -2,7 +2,7 @@ import Contact from '@/models/Contact';
 import PoliceStation from '@/models/PoliceStation';
 import TrafficViolation from '@/models/TrafficViolation';
 import connectDB from './db';
-import { sendInteractiveButtons, sendWhatsAppMessage, sendInteractiveList, sendWhatsAppImage } from './whatsapp';
+import { sendInteractiveButtons, sendWhatsAppMessage, sendInteractiveList } from './whatsapp';
 import { handleFormSubmission } from './chatbot-helpers';
 
 interface ChatbotResponse {
@@ -21,6 +21,7 @@ interface ChatbotResponse {
      * after this response, signalling that a cycle has completed.
      */
     sendFollowUpMenu?: boolean;
+    headerImageUrl?: string;
 }
 
 // Store user flow state in memory (in production, use Redis or database)
@@ -72,22 +73,12 @@ export async function processChatbotMessage(
             delete userFlowState[phoneNumber];
         }
 
-        // Send the Deoghar Police logo before the language selection prompt (awaited so it appears first)
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-        if (baseUrl) {
-            const logoUrl = `${baseUrl}/deoghar%20police%20logo.jpeg`;
-            try {
-                await sendWhatsAppImage({
-                    to: phoneNumber,
-                    imageUrl: logoUrl,
-                });
-            } catch (err) {
-                console.warn('⚠️  Logo image send failed (non-critical):', (err as Error)?.message);
-            }
-        }
+        const logoUrl = baseUrl ? `${baseUrl}/deoghar%20police%20logo.jpeg` : undefined;
 
         return {
             type: 'buttons',
+            headerImageUrl: logoUrl,
             bodyText: `*Welcome to Deoghar Police Official WhatsApp Chatbot*\n*देवघर पुलिस आधिकारिक व्हाट्सएप चैटबॉट में आपका स्वागत है*\n\n🚨 *Important Contacts / महत्वपूर्ण नंबर:*\n📞 Emergency / आपातकाल: 112\n📞 District Control Room: +919241821642\n📞 Cyber Crime / साइबर अपराध: 1930\n📞 Cyber Police Station: +919241821643\n📞 Traffic Police Station: +919296811585\n\nPlease select your official language:\nकृपया अपनी आधिकारिक भाषा चुनें:`,
             buttons: [
                 { id: 'lang_english', title: 'English' },
@@ -885,6 +876,7 @@ export async function sendChatbotResponse(
             to: phoneNumber,
             bodyText: response.bodyText,
             buttons: response.buttons,
+            headerImgUrl: response.headerImageUrl,
         });
     } else if (response.type === 'list' && response.bodyText && response.buttonText && response.sections) {
         return await sendInteractiveList({
