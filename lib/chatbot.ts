@@ -732,12 +732,12 @@ async function handleSubServiceSelection(
             hindi: `📝 *अन्य पासपोर्ट समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nप्रिया शर्मा\nCD9876543\nदस्तावेज जमा करने में समस्या\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
         sub_character_delay: {
-            english: `📝 *Character Verification Delay*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\nVerification is delayed by 15 days\n\nPlease reply with all details.`,
-            hindi: `📝 *चरित्र सत्यापन में देरी*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nसत्यापन 15 दिनों से लंबित है\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
+            english: `📝 *Character Verification Delay*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Application Date\n*Line 4:* Concerned Police Station\n*Line 5:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\n12/03/2026\nTown Thana\nVerification is delayed by 15 days\n\nPlease reply with all details.`,
+            hindi: `📝 *चरित्र सत्यापन में देरी*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* आवेदन तिथि\n*पंक्ति 4:* संबंधित पुलिस स्टेशन\n*पंक्ति 5:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\n12/03/2026\nनगर थाना\nसत्यापन 15 दिनों से लंबित है\n\nकृपया सभी विवरण के साथ उत्तर दें।`,
         },
         sub_character_other: {
-            english: `📝 *Other Character Verification Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\nName is misspelled in the application\n\nPlease reply with details.`,
-            hindi: `📝 *अन्य चरित्र सत्यापन समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया विवरण के साथ उत्तर दें।`,
+            english: `📝 *Other Character Verification Issues*\n\nPlease provide (one per line):\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Application Date\n*Line 4:* Concerned Police Station\n*Line 5:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\n12/03/2026\nTown Thana\nName is misspelled in the application\n\nPlease reply with details.`,
+            hindi: `📝 *अन्य चरित्र सत्यापन समस्याएं*\n\nकृपया प्रदान करें (प्रति पंक्ति एक):\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* आवेदन तिथि\n*पंक्ति 4:* संबंधित पुलिस स्टेशन\n*पंक्ति 5:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\n12/03/2026\nनगर थाना\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया विवरण के साथ उत्तर दें।`,
         },
         sub_petition_not_visited: {
             english: `📝 *Police Did Not Visit - Petition*\n\nPlease provide (one per line):\n\n*Line 1:* Your Name\n*Line 2:* Father's Name\n*Line 3:* Address\n*Line 4:* Mobile Number\n*Line 5:* Concerned Police Station\n*Line 6:* Issue Details\n\n*Example:*\nAmit Singh\nRakesh Singh\nWard 5, Deoghar\n9876543210\nTown Thana\nPolice did not visit regarding my petition filed 5 days ago\n\nPlease reply with all details.`,

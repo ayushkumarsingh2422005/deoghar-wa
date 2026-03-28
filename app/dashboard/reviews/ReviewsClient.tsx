@@ -78,7 +78,7 @@ export default function ReviewsClient() {
                                 <tr>
                                     <th className="px-6 py-4">User</th>
                                     <th className="px-6 py-4">Review/Suggestion</th>
-                                    <th className="px-6 py-4">Status</th>
+                                    {/* <th className="px-6 py-4">Status</th> */}
                                     <th className="px-6 py-4">Date</th>
                                 </tr>
                             </thead>
@@ -96,7 +96,7 @@ export default function ReviewsClient() {
                                         <td className="px-6 py-4 max-w-md">
                                             <div className="whitespace-pre-wrap">{review.content}</div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        {/* <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium ${review.status === 'approved'
                                                 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                                                 : review.status === 'rejected'
@@ -105,7 +105,7 @@ export default function ReviewsClient() {
                                                 }`}>
                                                 {review.status.charAt(0).toUpperCase() + review.status.slice(1)}
                                             </span>
-                                        </td>
+                                        </td> */}
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {new Date(review.createdAt).toLocaleDateString()}
                                             <div className="text-xs mt-0.5">

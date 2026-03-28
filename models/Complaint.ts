@@ -25,6 +25,7 @@ export interface IComplaint extends Document {
     fatherName?: string;
     address?: string;
     applicationNumber?: string;
+    applicationDate?: string;
     policeStation?: string;
     location?: string;
     challanNumber?: string;
@@ -79,6 +80,7 @@ const ComplaintSchema = new Schema<IComplaint>(
         fatherName: String,
         address: String,
         applicationNumber: String,
+        applicationDate: String,
         policeStation: String,
         location: String,
         challanNumber: String,

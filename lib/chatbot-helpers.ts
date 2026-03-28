@@ -158,12 +158,12 @@ export function validateFormInput(
 
     // Character delay
     if (formType === 'sub_character_delay') {
-        if (lines.length < 3) {
+        if (lines.length < 5) {
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\nVerification delayed by 15 days\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nसत्यापन 15 दिनों से लंबित है\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Application Date\n*Line 4:* Concerned Police Station\n*Line 5:* Remarks\n\n*Example:*\nSunil Verma\nCH12345\n12/03/2026\nTown Thana\nVerification delayed by 15 days\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* आवेदन तिथि\n*पंक्ति 4:* संबंधित पुलिस स्टेशन\n*पंक्ति 5:* टिप्पणी\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\n12/03/2026\nनगर थाना\nसत्यापन 15 दिनों से लंबित है\n\nकृपया पुनः प्रयास करें।`,
             };
         }
         return {
@@ -171,19 +171,21 @@ export function validateFormInput(
             data: {
                 name: lines[0],
                 applicationNumber: lines[1],
-                remarks: lines.slice(2).join(' '),
+                applicationDate: lines[2],
+                policeStation: lines[3],
+                remarks: lines.slice(4).join(' '),
             },
         };
     }
 
     // Character other
     if (formType === 'sub_character_other') {
-        if (lines.length < 3) {
+        if (lines.length < 5) {
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\nName misspelled in application\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Application Date\n*Line 4:* Concerned Police Station\n*Line 5:* Issue Details\n\n*Example:*\nSunil Verma\nCH12345\n12/03/2026\nTown Thana\nName misspelled in application\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* आवेदन तिथि\n*पंक्ति 4:* संबंधित पुलिस स्टेशन\n*पंक्ति 5:* समस्या विवरण\n\n*उदाहरण:*\nसुनील वर्मा\nCH12345\n12/03/2026\nनगर थाना\nआवेदन में नाम की वर्तनी गलत है\n\nकृपया पुनः प्रयास करें।`,
             };
         }
         return {
@@ -191,7 +193,9 @@ export function validateFormInput(
             data: {
                 name: lines[0],
                 applicationNumber: lines[1],
-                remarks: lines.slice(2).join(' '),
+                applicationDate: lines[2],
+                policeStation: lines[3],
+                remarks: lines.slice(4).join(' '),
             },
         };
     }

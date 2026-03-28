@@ -135,6 +135,13 @@ export default async function ComplaintDetailPage({
                                 </div>
                             )}
 
+                            {complaint.applicationDate && (
+                                <div>
+                                    <label className="text-sm text-slate-500 dark:text-slate-400">Application Date</label>
+                                    <p className="text-slate-900 dark:text-white">{complaint.applicationDate}</p>
+                                </div>
+                            )}
+
                             {complaint.policeStation && (
                                 <div>
                                     <label className="text-sm text-slate-500 dark:text-slate-400">Concerned Police Station</label>
