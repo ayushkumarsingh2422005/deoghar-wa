@@ -13,12 +13,12 @@ export function validateFormInput(
 
     // Passport delay validation
     if (formType === 'sub_passport_delay') {
-        if (lines.length < 3) {
+        if (lines.length < 4) {
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide all required details in this format:\n\n*Line 1:* Name of Applicant\n*Line 2:* Passport Application Number\n*Line 3:* Remarks\n\n*Example:*\nRahul Kumar\nAB1234567\nVerification pending for 2 months\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया इस प्रारूप में सभी आवश्यक विवरण प्रदान करें:\n\n*पंक्ति 1:* आवेदक का नाम\n*पंक्ति 2:* पासपोर्ट आवेदन संख्या\n*पंक्ति 3:* टिप्पणी\n\n*उदाहरण:*\nराहुल कुमार\nAB1234567\n2 महीने से सत्यापन लंबित\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide all required details in this format:\n\n*Line 1:* Name of Applicant\n*Line 2:* Passport Application Number\n*Line 3:* Concerned Police Station\n*Line 4:* Remarks\n\n*Example:*\nRahul Kumar\nAB1234567\nTown Thana\nVerification pending for 2 months\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया इस प्रारूप में सभी आवश्यक विवरण प्रदान करें:\n\n*पंक्ति 1:* आवेदक का नाम\n*पंक्ति 2:* पासपोर्ट आवेदन संख्या\n*पंक्ति 3:* संबंधित पुलिस स्टेशन\n*पंक्ति 4:* टिप्पणी\n\n*उदाहरण:*\nराहुल कुमार\nAB1234567\nनगर थाना\n2 महीने से सत्यापन लंबित\n\nकृपया पुनः प्रयास करें।`,
             };
         }
 
@@ -27,19 +27,20 @@ export function validateFormInput(
             data: {
                 name: lines[0],
                 applicationNumber: lines[1],
-                remarks: lines.slice(2).join(' '),
+                policeStation: lines[2],
+                remarks: lines.slice(3).join(' '),
             },
         };
     }
 
     // Passport other issues
     if (formType === 'sub_passport_other') {
-        if (lines.length < 3) {
+        if (lines.length < 4) {
             return {
                 isValid: false,
                 errorMessage: language === 'english'
-                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Issue Details\n\n*Example:*\nPriya Sharma\nCD9876543\nDocument submission issue\n\nPlease try again.`
-                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* समस्या विवरण\n\n*उदाहरण:*\nप्रिया शर्मा\nCD9876543\nदस्तावेज जमा करने में समस्या\n\nकृपया पुनः प्रयास करें।`,
+                    ? `❌ *Incomplete Information*\n\nPlease provide:\n\n*Line 1:* Name\n*Line 2:* Application Number\n*Line 3:* Concerned Police Station\n*Line 4:* Issue Details\n\n*Example:*\nPriya Sharma\nCD9876543\nTown Thana\nDocument submission issue\n\nPlease try again.`
+                    : `❌ *अधूरी जानकारी*\n\nकृपया प्रदान करें:\n\n*पंक्ति 1:* नाम\n*पंक्ति 2:* आवेदन संख्या\n*पंक्ति 3:* संबंधित पुलिस स्टेशन\n*पंक्ति 4:* समस्या विवरण\n\n*उदाहरण:*\nप्रिया शर्मा\nCD9876543\nनगर थाना\nदस्तावेज जमा करने में समस्या\n\nकृपया पुनः प्रयास करें।`,
             };
         }
 
@@ -48,7 +49,8 @@ export function validateFormInput(
             data: {
                 name: lines[0],
                 applicationNumber: lines[1],
-                remarks: lines.slice(2).join(' '),
+                policeStation: lines[2],
+                remarks: lines.slice(3).join(' '),
             },
         };
     }
